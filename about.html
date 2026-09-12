@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SFERA Lab — Methodology &amp; Provenance</title>
+<meta name="description" content="Calculation method, conventions, two-layer verification record, school labels and honest limitations of the SFERA Lab natal chart generator.">
+<link rel="canonical" href="https://aivanizki-bit.github.io/sfera-lab/about.html">
+<meta property="og:title" content="SFERA Lab — Methodology &amp; Provenance">
+<meta property="og:description" content="Calculation method, conventions, two-layer verification record, school labels and honest limitations of the SFERA Lab natal chart generator.">
+<meta property="og:url" content="https://aivanizki-bit.github.io/sfera-lab/about.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<nav><a href="index.html">Generator</a>  <a href="about.html">Methodology</a>  <a href="lab-status.html">Research status</a>  <a href="research/x01z.html">X-01-Z note</a>  <a href="privacy.html">Privacy</a></nav>
+
+<h1>Methodology &amp; provenance</h1>
+<h2>What this is</h2>
+<p>SFERA Lab is a <b>research instrument</b>, not a commercial product. This page computes
+real Western tropical natal charts and displays them with their conventions labeled. It
+generates no AI text. It exists because the SFERA research program needs a verified
+deterministic calculation layer, and because a free, honest chart tool is genuinely
+useful. This is a <b>Research UI</b>, deliberately not a finished product interface.</p>
+<h2>Calculation method</h2>
+<table>
+<tr><th>Layer</th><th>Method</th></tr>
+<tr><td>Planetary positions</td><td><b>astronomy-engine 2.1.19</b> (MIT, analytic ephemeris —
+the same library version as the verified Python kernel), geocentric ecliptic-of-date
+longitudes; retrograde states from numeric 1-hour central-difference speeds.</td></tr>
+<tr><td>Time zones</td><td>IANA tzdb via the browser/Node <code>Intl</code> database —
+the authoritative source for historical offsets, DST and LMT-era births. Nonexistent local
+times (DST spring gaps) are rejected, not silently shifted. Ambiguous fall-back times are
+labeled and resolved explicitly (fold 0/1).</td></tr>
+<tr><td>Houses</td><td>Native formulas for <b>ASC/MC and Placidus, equal and whole-sign</b>
+systems, computed in your browser. House systems genuinely disagree away from the angles —
+that is a documented feature of the tradition; the system used is always labeled.
+Koch, Regiomontanus and Campanus are computed by the Python lab kernel but are <b>not</b>
+implemented in this browser build (honestly absent, never approximated).</td></tr>
+<tr><td>Lunar nodes</td><td>Mean node via the analytic secular formula. The true
+(osculating) node requires the lab kernel's library and is <b>suppressed</b> here.</td></tr>
+<tr><td>Aspects</td><td>Major aspects (0/60/90/120/180) with one documented natal orb set
+(config orbs-v0.1); the convention is disclosed rather than hidden.</td></tr>
+<tr><td>Suppression rule</td><td>Unknown birth time → Moon degree, angles and houses are
+suppressed, never approximated. Beyond ±66° latitude angles and houses are suppressed
+(school-dependent to the point of being undefined).</td></tr>
+</table>
+<h2>Verification (two layers, both frozen and committed)</h2>
+<table>
+<tr><th>Record</th><th>Result</th></tr>
+<tr><td>Python kernel <code>sfera-western 0.1.0</code> vs Swiss Ephemeris (pyswisseph) + published
+oracle anchors (equinoxes/solstices/new moons)</td><td>results_differential_2026-09-12.json —
+51 frozen verification cases, max cross-engine delta
+0.0051°. Engine-vs-engine agreement is NOT proof of truth,
+and is labeled as such.</td></tr>
+<tr><td>This browser port (<code>sfera-western-js 0.1.0-js.1</code>) vs the Python kernel</td>
+<td>results_differential_js_2026-09-12.json — 260 frozen cases (positions, 16 historical time-zone batteries,
+192 house-system cases across 8 latitudes, mean node, full-chart pipelines, byte-level
+reading-template comparison): <b>0 failures</b>.
+Layer maxima: positions 0° ·
+time zones 0 s ·
+houses 0.0001° ·
+mean node 0.0048°.
+The committed record and fixture are in the public repository.</td></tr>
+</table>
+<h2>School &amp; convention labels</h2>
+<p>Western tropical astrology is not one thing. Where a convention matters (house system,
+orb set, node type), this tool shows which one was used. Statements about meaning come only
+from the labeled static template, which describes the calculated chart and deliberately
+suppresses what is unknown.</p>
+<h2>Research status (honest)</h2>
+<p>The lab has run an internal quality benchmark of AI interpretation (X-01-Z) and
+maintains an evidence database and claim ledger — see the
+<a href="lab-status.html">live research status page</a>, generated from the repository.
+What is <b>not</b> validated: human practitioner acceptance, the engine bet on voluntary
+return, willingness to pay. No research claims are made beyond what exists.</p>
+<h2>Privacy</h2>
+<p>The calculation runs in your browser; birth data never leaves your device; there is no
+server to receive it. Full explanation: <a href="privacy.html">privacy page</a>.</p>
+<h2>City list disclosure</h2>
+<p>The city search uses a static bundled list of 161 cities compiled by the research
+agent (coordinates ≈±1 km, verified class: UNVERIFIED_COMPILED_LIST). For archival
+precision, enter exact latitude/longitude and the IANA time zone manually.</p>
+<footer>
+<hr>
+<p class="small">SFERA Lab — research prototype, not a product · engine sfera-western-js 0.1.0-js.1
+(browser port of sfera-western 0.1.0) · no accounts, no cookies, no server ·
+<a href="about.html">methodology &amp; provenance</a> · <a href="privacy.html">privacy</a> ·
+<a href="lab-status.html">research status</a> · 18+ only</p>
+</footer>
+</body>
+</html>

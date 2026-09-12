@@ -1,0 +1,57 @@
+{
+ "generated_utc": "2026-09-12T22:42:29.075Z",
+ "fixture": "js_fixture_2026-09-13.json",
+ "engine_js": "sfera-western-js 0.1.0-js.1",
+ "tolerances": {
+  "positions_deg": 0.0051,
+  "speed_deg_per_day": 0.0001,
+  "tz_offset_seconds": 0,
+  "houses_deg": 0.02,
+  "mean_node_deg": 0.01,
+  "aspect_orb_deg": 0.02,
+  "reading_numeric_token_deg": 0.06
+ },
+ "layers": {
+  "positions": {
+   "cases": 31,
+   "max_delta_deg": 0,
+   "worst_case": "",
+   "tol": 0.0051
+  },
+  "timezone": {
+   "cases": 16,
+   "max_delta_seconds": 0,
+   "worst_case": "",
+   "tol": 0
+  },
+  "houses": {
+   "cases": 192,
+   "raised_as_expected": 24,
+   "max_delta_deg": 0.00010000000003174137,
+   "worst_case": "1990-05-15T12:30:00Z lat=55.75 placidus cusp4",
+   "tol": 0.02
+  },
+  "mean_node": {
+   "cases": 11,
+   "max_delta_deg": 0.004821999999990112,
+   "worst_case": "2029-09-09T09:09:00Z",
+   "tol": 0.01,
+   "speed_note": "pyswisseph MEAN_NODE speed=0 convention; port speed −0.0529539°/day analytic (not compared)"
+  },
+  "full_chart": {
+   "cases": 10,
+   "reading_checks": 2,
+   "max_numeric_delta": {
+    "d": 0.004799999999988813,
+    "p": "Sydney equal (south).nodes.mean_node.longitude",
+    "e": 92.2658,
+    "g": 92.2706
+   }
+  }
+ },
+ "failures": [],
+ "verdict": {
+  "total_failures": 0,
+  "statement": "ALL JS-PORT CASES WITHIN TOLERANCE vs the frozen Python kernel fixture — agreement is NOT proof of truth (lineage caveat: positions share the astronomy-engine lineage; houses/nodes verified against pyswisseph via the kernel)."
+ }
+}

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://aivanizki-bit.github.io/sfera-lab/sitemap.xml

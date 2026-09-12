@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SFERA Lab — Privacy (research prototype)</title>
+<meta name="description" content="What the SFERA Lab generator does and does not do with birth data: browser-only calculation, no server, no central telemetry, honest infrastructure disclosure.">
+<link rel="canonical" href="https://aivanizki-bit.github.io/sfera-lab/privacy.html">
+<meta property="og:title" content="SFERA Lab — Privacy (research prototype)">
+<meta property="og:description" content="What the SFERA Lab generator does and does not do with birth data: browser-only calculation, no server, no central telemetry, honest infrastructure disclosure.">
+<meta property="og:url" content="https://aivanizki-bit.github.io/sfera-lab/privacy.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/site.css">
+</head>
+<body>
+<nav><a href="index.html">Generator</a>  <a href="about.html">Methodology</a>  <a href="lab-status.html">Research status</a>  <a href="research/x01z.html">X-01-Z note</a>  <a href="privacy.html">Privacy</a></nav>
+<h1> SFERA Lab — privacy explanation (research prototype)</h1>
+<p><em>This is the plain-language privacy explanation for the public SFERA Lab generator ( EXECUTION_003 Part 3 ). It deliberately is not a lawyer-style privacy policy, and it does not claim GDPR compliance. It describes what the system actually does.</em></p>
+<h2> What input is used</h2>
+<p>The natal chart form asks for a birth date, an optional birth time, a place (city lookup from a small bundled list, or latitude/longitude), a time zone, an optional house system, and an optional free-text question.</p>
+<p><strong>The calculation runs entirely inside your browser.</strong> Your birth data is processed by JavaScript on your device and is never transmitted to us or to anyone else. There is no server that could receive it.</p>
+<h2> Whether input is retained</h2>
+<ul><li>Birth data: <strong>not retained anywhere by us</strong> — not on a server (there is none), not in storage. It exists only in the memory of your browser tab until you close or reload the page.</li><li>We cannot recover, reproduce, or look at your chart after you leave the page. Nothing is linked to you, because nothing about you reaches us.</li></ul>
+<h2> What telemetry is collected</h2>
+<ul><li>The <strong>current public surface has no central telemetry</strong>. There is no analytics service, no logging endpoint, and no server. The page's visit counter, funnel measurement, and source-tag (<code>?src=</code>) machinery are implemented client-side and are discarded when you close the page, unless and until a research storage backend is ever added — in which case this page will be updated first, and only consent-gated events would flow there.</li><li>Your <strong>consent choice</strong> (if you make one) is stored in your own browser (<code>localStorage</code>), so the form can remember your answer. You can clear it any time via your browser settings ("site data" for this site).</li><li>Infrastructure note (honesty): the site is served as static files by GitHub Pages (GitHub/Microsoft). Like any web host, GitHub records request logs (e.g., IP address, user agent) under its own privacy policy for security and abuse prevention. That logging is outside this project's control, and this project never receives it.</li></ul>
+<h2> What consent changes</h2>
+<p>The consent checkbox on the form allows anonymous usage measurement of this research prototype (which stage of the form/calculation/reading flow was reached, and the coarse source tag of the link you followed). Consent <strong>never</strong> enables anyone to see your birth data or your question — by construction, they never leave your device. If a research storage backend is added later, only consented, non-identifying events would ever be stored there.</p>
+<h2> Telemetry never feeds interpretation</h2>
+<p>No measurement, telemetry, or history of any kind is ever used as input to any calculation or reading. This is a standing rule of the SFERA Lab, in force in every component built so far.</p>
+<h2> This is an experimental Lab surface</h2>
+<p>This is a research instrument, not a commercial product, and not a finished service. It may change, break, or be taken offline without notice. It is not the final SFERA product.</p>
+<h2> How to stop participating</h2>
+<p>Just stop using the page — there is nothing stored about you to delete. To also remove the consent marker from your own browser, clear this site's data in your browser settings. We hold no data we could delete on request, because we receive none.</p>
+<h2> Scope</h2>
+<p>18+ only. If you submit someone else's birth data, that is your responsibility — we never receive or store it anyway.</p>
+<footer>
+<hr>
+<p class="small">SFERA Lab — research prototype, not a product · engine sfera-western-js 0.1.0-js.1
+(browser port of sfera-western 0.1.0) · no accounts, no cookies, no server ·
+<a href="about.html">methodology &amp; provenance</a> · <a href="privacy.html">privacy</a> ·
+<a href="lab-status.html">research status</a> · 18+ only</p>
+</footer>
+</body>
+</html>

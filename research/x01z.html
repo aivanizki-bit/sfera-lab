@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SFERA Lab — X-01-Z benchmark in plain language (including failures)</title>
+<meta name="description" content="What our first AI-interpretation quality benchmark found — including the negative results: wrong-chart contamination, house errors, and the useful-but-unfaithful raw-AI trade-off.">
+<link rel="canonical" href="https://aivanizki-bit.github.io/sfera-lab/research/x01z.html">
+<meta property="og:title" content="SFERA Lab — X-01-Z benchmark in plain language (including failures)">
+<meta property="og:description" content="What our first AI-interpretation quality benchmark found — including the negative results: wrong-chart contamination, house errors, and the useful-but-unfaithful raw-AI trade-off.">
+<meta property="og:url" content="https://aivanizki-bit.github.io/sfera-lab/research/x01z.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+<nav><a href="index.html">Generator</a>  <a href="about.html">Methodology</a>  <a href="lab-status.html">Research status</a>  <a href="research/x01z.html">X-01-Z note</a>  <a href="privacy.html">Privacy</a></nav>
+<h1> X-01-Z, in plain language — what our first AI-quality benchmark found</h1>
+<p><em>Public research note (EXECUTION_003 Part 7), based on the committed internal report <code>experiments/X-01-Z_report_v1.md</code> (2026-09-12). The full report with all numbers is in the Lab repository. This page deliberately includes the failures.</em></p>
+<h2> What we tested</h2>
+<p>SFERA is building toward AI-assisted astrology interpretation, so before letting an AI write a single public word, we measured whether a <strong>constrained</strong> AI — one forced to stay inside a labeled knowledge base and to attach every statement to the calculated chart — is more <strong>faithfully grounded</strong> than an unconstrained ("raw") AI writing freely from what it picked up in training.</p>
+<p>Four kinds of text were generated over 17 benchmark chart cases: our deterministic template, a deliberate imitation of generic mass-market horoscope style, the constrained AI, and the raw AI. Two different AI model families generated the AI texts (44 runs, zero cost), and two further independent model families audited them sentence-by-sentence against chart ground truth.</p>
+<h2> What we found</h2>
+<p><strong>The constrained architecture held its epistemic line.</strong> In the audited subset it produced zero unsupported-interpretation defects and zero overclaims: every doctrinal statement carried its school label and traced to the knowledge base.</p>
+<p><strong>But the zero-position-hallucination target FAILED — we record that as a result, not hide it.</strong> The constrained models still made positional errors:</p>
+<ul><li>one GLM run interpreted the <em>wrong chart</em> (batch-generation contamination: it read a different benchmark case's data and produced 10 of the arm's 11 position errors);</li><li>the Qwen arm repeatedly mis-attributed planets to houses (off by one, or a wrong cusp labeled as an 8th-house cusp).</li></ul>
+<p><strong>Raw AI sounded better and was less faithful.</strong> The unconstrained texts were richer, more specific, and rated more <em>useful</em> — while carrying far more defects: calculation errors in nearly every run, freely invented biography ("you may have felt your ideas were dismissed"), and overclaims. "Helpful-sounding" and "faithful to the chart" are measurably different axes, and raw generation trades the second for the first.</p>
+<p><strong>The generic mass-market imitation was the worst on usefulness and safety.</strong> It states no real positions, generalizes flattery, and — unlike the other arms — ignored a fatalistic question that deserves care.</p>
+<p><strong>Even our AI judges disagreed with each other</strong> (mean difference ≈ 0.64 rubric points per dimension, max 3). We keep that disagreement in the record instead of averaging it away. AI consensus is not practitioner validation.</p>
+<p><strong>The audit instrument caught a defect in our own harness</strong> (missing ground truth in a first audit round). We fixed it, re-ran, and kept the degraded first round in the repository. Nothing was silently corrected.</p>
+<h2> What we did NOT prove</h2>
+<ul><li>that astrology works or predicts anything — this benchmark measured text quality against charts, not astrology against reality;</li><li>that practitioners or users accept any of these texts — no human panel has judged them yet;</li><li>the scientific validity of any traditional claim;</li><li>user preference, retention, or willingness to pay.</li></ul>
+<h2> Why we publish the failures</h2>
+<p>A lab that only publishes wins is a marketing department. The negative results above changed what we build next (one chart per request is now a hard rule; the constrained prompt gets a house-verification pass). That is the point.</p>
+<footer>
+<hr>
+<p class="small">SFERA Lab — research prototype, not a product · engine sfera-western-js 0.1.0-js.1
+(browser port of sfera-western 0.1.0) · no accounts, no cookies, no server ·
+<a href="about.html">methodology &amp; provenance</a> · <a href="privacy.html">privacy</a> ·
+<a href="lab-status.html">research status</a> · 18+ only</p>
+</footer>
+</body>
+</html>
