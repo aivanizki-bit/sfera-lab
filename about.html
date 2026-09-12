@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>SFERA Lab — Methodology &amp; Provenance</title>
 <meta name="description" content="Calculation method, conventions, two-layer verification record, school labels and honest limitations of the SFERA Lab natal chart generator.">
@@ -59,7 +60,9 @@ and is labeled as such.</td></tr>
 <td>results_differential_js_2026-09-12.json — 260 frozen cases (positions, 16 historical time-zone batteries,
 192 house-system cases across 8 latitudes, mean node, full-chart pipelines, byte-level
 reading-template comparison): <b>0 failures</b>.
-Layer maxima: positions 0° ·
+Layer maxima: positions 0°
+(same library lineage — not an independent cross-check; the independent cross-engine
+check is the Python kernel's 0.0051° vs Swiss Ephemeris) ·
 time zones 0 s ·
 houses 0.0001° ·
 mean node 0.0048°.
@@ -67,9 +70,9 @@ The committed record and fixture are in the public repository.</td></tr>
 </table>
 <h2>School &amp; convention labels</h2>
 <p>Western tropical astrology is not one thing. Where a convention matters (house system,
-orb set, node type), this tool shows which one was used. Statements about meaning come only
-from the labeled static template, which describes the calculated chart and deliberately
-suppresses what is unknown.</p>
+orb set, node type), this tool shows which one was used. The only interpretive surface is
+the labeled static template, which lists calculated positions and deliberately suppresses
+what is unknown — it makes no claims beyond the chart's geometry.</p>
 <h2>Research status (honest)</h2>
 <p>The lab has run an internal quality benchmark of AI interpretation (X-01-Z) and
 maintains an evidence database and claim ledger — see the
@@ -86,7 +89,7 @@ precision, enter exact latitude/longitude and the IANA time zone manually.</p>
 <footer>
 <hr>
 <p class="small">SFERA Lab — research prototype, not a product · engine sfera-western-js 0.1.0-js.1
-(browser port of sfera-western 0.1.0) · no accounts, no cookies, no server ·
+(browser port of sfera-western 0.1.0) · no accounts, no tracking, no server ·
 <a href="about.html">methodology &amp; provenance</a> · <a href="privacy.html">privacy</a> ·
 <a href="lab-status.html">research status</a> · 18+ only</p>
 </footer>

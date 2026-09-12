@@ -229,7 +229,8 @@
     if (Math.abs(latDeg) > 66) {
       throw new BirthTimeError("POLAR_LATITUDE_UNSUPPORTED_IN_BROWSER_BUILD");
     }
-    if (!HOUSE_SYSTEMS_JS[system]) {
+    if (!Object.prototype.hasOwnProperty.call(HOUSE_SYSTEMS_JS, system)) {
+      // hasOwnProperty, not bracket-truthiness: "constructor"/"__proto__" must not pass
       throw new BirthTimeError("HOUSE_SYSTEM_NOT_IN_BROWSER_BUILD:" + system);
     }
     var am = ascMc(utcMs, latDeg, lonEast);

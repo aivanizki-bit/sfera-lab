@@ -36,6 +36,11 @@
     var houses = str(form, "houses", 20) || "placidus";
     var question = str(form, "question", 300);
 
+    // boundary allowlist (model-council finding: don't trust even the <select>)
+    if (["placidus", "whole_sign", "equal"].indexOf(houses) === -1) {
+      fail("Unknown house system.");
+    }
+
     if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) fail("Enter the birth date as a calendar date.");
     var dm = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date);
     var y = +dm[1], mo = +dm[2], d = +dm[3];
