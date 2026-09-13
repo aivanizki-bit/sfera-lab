@@ -134,7 +134,7 @@
   function hr2() { return dictGet(["_hr2"]); }
 
   function buildHumanReading(chart) {
-    if (LANG !== "ru" || !hr2() || !root.SFERA_READING2) {
+    if (LANG !== "ru" || !hr2() || !window.SFERA_READING2) {
       var b = el("div");
       b.className = "human-reading hr2";
       b.appendChild(txt("h2", "Your portrait"));
