@@ -43,3 +43,14 @@ fieldset{margin:.6rem 0;padding:.3rem .6rem}
 details.tech{border:1px solid #ccc;background:#fafafa;padding:.4rem .7rem;margin:1rem 0}
 details.tech summary{cursor:pointer;font-weight:bold}
 details.tech[open]{padding-bottom:.8rem}
+
+/* EXECUTION_005: human reading v0.2 */
+.human-reading.hr2{border:1px solid #2c5a8f33;background:#f7f9fc;padding:.7rem 1rem;margin:1rem 0}
+.human-reading.hr2 h2{margin-top:.2rem;font-size:1.35rem}
+.hr2 .hr-block h3{font-size:1.05rem;margin:.5rem 0 .2rem}
+.hr2 .hr-block p{margin:.35rem 0}
+.hr-ev{margin:.4rem 0 .2rem;border-top:1px dashed #9992;padding-top:.25rem}
+.hr-ev summary{cursor:pointer;font-size:.82rem;color:#2c5a8f}
+.hr-ev ul{margin:.2rem 0;padding-left:1.1rem}
+details.tech{border:1px solid #ccc;background:#fafafa;padding:.4rem .7rem;margin:1rem 0}
+details.tech summary{cursor:pointer;font-weight:bold}

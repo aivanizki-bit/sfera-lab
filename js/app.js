@@ -50,13 +50,13 @@
     .then(function (d) {
       t = d || {};
       if (LANG === "ru") {
-        // human-reading phrase library (EXECUTION_004 addendum prototype, hr-v0.1)
-        return fetch(ASSET_ROOT + "i18n/reading-ru.json")
+        // human-reading v0.2 authored KB (EXECUTION_005)
+        return fetch(ASSET_ROOT + "i18n/reading2-ru.json")
           .then(function (r) { return r.ok ? r.json() : null; })
-          .then(function (hr) { t._hr = hr || null; })
-          .catch(function () { t._hr = null; });
+          .then(function (hr2d) { t._hr2 = hr2d || null; })
+          .catch(function () { t._hr2 = null; });
       }
-      t._hr = null;
+      t._hr2 = null;
     })
     .then(function () { wireCityPicker(); })
     .catch(function () { t = {}; wireCityPicker(); });
@@ -125,233 +125,24 @@
       houses: houses, question: question || null, placeLabel: placeLabel };
   }
 
-  // ---------------------------------------------------------------- human reading (hr-v0.1 prototype)
-  /* DETERMINISTIC composition over the verified chart structure + the labeled phrase
-   * library (i18n/reading-ru.json). No AI at runtime, no network, nothing sent. Every
-   * block keeps an internal evidence trail (factors used) rendered in section 10 —
-   * "the user sees clean prose, the Lab retains the evidence chain". Forecasting is
-   * honestly NOT_IMPLEMENTED (needs a deterministic transit layer); natal data alone
-   * never fabricates a "today/month/year" reading. */
+  // ---------------------------------------------------------------- human reading v0.2 (EXECUTION_005)
+  /* Composition is delegated to js/reading2.js (SFERA_READING2) over the authored KB
+   * i18n/reading2-ru.json: interpretation atoms -> themed sections -> grounded prose.
+   * L1 quick portrait, L2 deep reading, per-section evidence details, technical layer
+   * last. Jargon stays out of the prose and lives only in the evidence layer. */
 
-  function hr() { return dictGet(["_hr"]); }
-
-  function houseOf(lon, cusps) {
-    for (var i = 0; i < 12; i++) {
-      var a = cusps[i].longitude, b = cusps[(i + 1) % 12].longitude;
-      if (((b - a + 360) % 360) > ((lon - a + 360) % 360)) return i + 1;
-    }
-    return null;
-  }
-
-  function factorStr(bodyKey, chart, withHouse) {
-    var v = chart.planets[bodyKey];
-    if (!v || !v.sign) return null;
-    var s = bodyName(bodyKey) + " в " + (hr().meta.signs_gen[v.sign] || v.sign) + " (" + v.dms + " " + v.sign + ")";
-    if (withHouse && chart.houses) {
-      var h = houseOf(v.longitude, chart.houses.cusps);
-      if (h) s += " · дом " + h;
-    }
-    return s;
-  }
-
-  function aspectsOf(chart, keys, types) {
-    return chart.aspects.filter(function (a) {
-      return (keys.indexOf(a.a) !== -1) && (keys.indexOf(a.b) !== -1) &&
-        (!types || types.indexOf(a.type) !== -1);
-    }).sort(function (x, y) { return x.orb - y.orb; });
-  }
+  function hr2() { return dictGet(["_hr2"]); }
 
   function buildHumanReading(chart) {
-    var box = el("div");
-    box.className = "human-reading";
-    if (LANG !== "ru" || !hr()) {
-      box.appendChild(txt("h2", "What the chart says — human reading"));
-      box.appendChild(txt("p", "Human Reading prototype: this research build ships it in Russian only. The complete technical chart is below.", "small"));
-      return box;
-    }
-    var H = hr(), T2 = H.titles, timed = !!(chart.angles && chart.houses);
-    var ev = []; // evidence trail {section, factors}
-
-    function block(title, paras, sectionId, factors, conf) {
-      var b = el("section");
-      b.className = "hr-block";
-      b.appendChild(txt("h3", title));
-      paras.forEach(function (p) { b.appendChild(txt("p", p)); });
-      if (conf) b.appendChild(txt("p", conf, "small"));
-      if (factors && factors.length) ev.push({ section: title, factors: factors });
-      box.appendChild(b);
+    if (LANG !== "ru" || !hr2() || !root.SFERA_READING2) {
+      var b = el("div");
+      b.className = "human-reading hr2";
+      b.appendChild(txt("h2", "Your portrait"));
+      b.appendChild(txt("p", "Human Reading v0.2: this research build ships it in Russian only. The complete technical chart is below.", "small"));
       return b;
     }
-    function fmajor(k) { return (H.meta.aspects[k]); }
-
-    box.appendChild(txt("h2", T2.h2));
-    box.appendChild(txt("p", T2.intro, "small"));
-
-    var sun = chart.planets.sun;
-    // 1 КТО Я
-    (function () {
-      var paras = [H.sun_sign[sun.sign]];
-      var f = ["Sun " + sun.sign];
-      if (timed) {
-        var h = houseOf(sun.longitude, chart.houses.cusps);
-        if (h) { paras.push(H.house_domain[String(h)] + "."); f.push("Sun house " + h); }
-      }
-      block(T2.s1, paras, "s1", f, null);
-    })();
-    // 2 СИЛЬНЫЕ СТОРОНЫ
-    (function () {
-      var paras = [H.section_phrases.s2_intro];
-      var f = [];
-      var good = aspectsOf(chart, ["sun", "moon", "mercury", "venus", "mars", "saturn", "jupiter"], ["trine", "sextile"]).slice(0, 3);
-      good.forEach(function (a) {
-        paras.push(H.section_phrases.s2_aspect
-          .replace("{a}", bodyName(a.a)).replace("{b}", bodyName(a.b))
-          .replace("{type}", fmajor(a.type)).replace("{flavor}", H.aspect_flavor[a.type]));
-        f.push(a.a + "-" + a.b + " " + a.type);
-      });
-      paras.push(H.section_phrases.s2_jupiter
-        .replace("{sign}", hr().meta.signs_gen[chart.planets.jupiter.sign])
-        .replace("{domain_j}", H.domain_jupiter[chart.planets.jupiter.sign]));
-      f.push("Jupiter " + chart.planets.jupiter.sign);
-      if (!good.length) paras.push("Гармоничных связей личных планет немного — сильные стороны этой карты скорее в устойчивости её ядерных положений, чем в «лёгких» аспектах.");
-      block(T2.s2, paras, "s2", f, null);
-    })();
-    // 3 ПРОТИВОРЕЧИЯ
-    (function () {
-      var hard = aspectsOf(chart, ["sun", "moon", "mercury", "venus", "mars"], ["square", "opposition"]).slice(0, 3);
-      if (!hard.length) { block(T2.s3, [T2.no_tension], "s3", [], null); return; }
-      var paras = [H.section_phrases.s3_intro];
-      hard.forEach(function (a) {
-        paras.push(H.section_phrases.s3_aspect
-          .replace("{a}", bodyName(a.a)).replace("{b}", bodyName(a.b))
-          .replace("{type}", fmajor(a.type)).replace("{flavor}", H.aspect_flavor[a.type]));
-      });
-      block(T2.s3, paras, "s3", hard.map(function (a) { return a.a + "-" + a.b + " " + a.type; }), null);
-    })();
-    // 4 ЭМОЦИИ
-    (function () {
-      var moon = chart.planets.moon;
-      if (!moon || moon.suppressed) {
-        block(T2.s4, ["Луна требует времени рождения — без него этот раздел честно пуст (см. примечание в начале)."], "s4", [], null);
-        return;
-      }
-      var paras = [H.moon_sign[moon.sign]];
-      var f = ["Moon " + moon.sign];
-      if (timed) {
-        var h = houseOf(moon.longitude, chart.houses.cusps);
-        if (h) { paras.push(H.section_phrases.s4_house.replace("{n}", h).replace("{domain}", H.house_domain[String(h)].replace("сфера: ", ""))); f.push("Moon house " + h); }
-      }
-      var ma = aspectsOf(chart, ["moon"], null)[0];
-      if (ma) {
-        var other = ma.a === "moon" ? ma.b : ma.a;
-        paras.push("Луна и " + bodyName(other) + " (" + fmajor(ma.type) + ") " + H.aspect_flavor[ma.type] + ".");
-        f.push("Moon-" + other + " " + ma.type);
-      }
-      block(T2.s4, paras, "s4", f, null);
-    })();
-    // 5 МЫШЛЕНИЕ
-    (function () {
-      var m = chart.planets.mercury;
-      var paras = [H.mercury_sign[m.sign]];
-      var f = ["Mercury " + m.sign];
-      if (timed) {
-        var h = houseOf(m.longitude, chart.houses.cusps);
-        if (h) { paras.push(H.section_phrases.s5_house.replace("{n}", h).replace("{domain}", H.house_domain[String(h)].replace("сфера: ", ""))); f.push("Mercury house " + h); }
-      }
-      block(T2.s5, paras, "s5", f, null);
-    })();
-    // 6 ЛЮБОВЬ
-    (function () {
-      var paras = [H.venus_sign[chart.planets.venus.sign], H.mars_sign[chart.planets.mars.sign]];
-      var f = ["Venus " + chart.planets.venus.sign, "Mars " + chart.planets.mars.sign];
-      if (timed) {
-        var hv = houseOf(chart.planets.venus.longitude, chart.houses.cusps);
-        var hm = houseOf(chart.planets.mars.longitude, chart.houses.cusps);
-        if (hv) paras.push(H.section_phrases.s6_venus_house.replace("{n}", hv).replace("{domain}", H.house_domain[String(hv)].replace("сфера: ", "")));
-        if (hm) paras.push(H.section_phrases.s6_mars_house.replace("{n}", hm).replace("{domain}", H.house_domain[String(hm)].replace("сфера: ", "")));
-        if (hv) f.push("Venus house " + hv);
-        if (hm) f.push("Mars house " + hm);
-      }
-      block(T2.s6, paras, "s6", f, null);
-    })();
-    // 7 РАБОТА
-    (function () {
-      var paras = [];
-      var sat = chart.planets.saturn;
-      var f = ["Saturn " + sat.sign];
-      if (timed) {
-        var h = houseOf(sat.longitude, chart.houses.cusps);
-        paras.push(H.section_phrases.s7_saturn
-          .replace("{sign}", H.meta.signs_gen[sat.sign]).replace("{n}", h || "—")
-          .replace("{domain}", h ? H.house_domain[String(h)].replace("сфера: ", "") : "—"));
-        if (h) f.push("Saturn house " + h);
-        paras.push(H.section_phrases.s7_mc.replace("{sign}", H.meta.signs_gen[chart.angles.mc.sign]));
-        f.push("MC " + chart.angles.mc.sign);
-      } else {
-        paras.push("Сатурн в знаке " + (H.meta.signs_gen[sat.sign]) + " — " + "зона долгого труда: здесь вы взрослеете годами, и здесь же строится настоящий авторитет. MC и дома требуют времени рождения, поэтому публичная роль в этой карте не разбирается. Важно: астрология не определяет карьерный исход — традиция описывает, где видит нагрузку и потенциал.");
-      }
-      block(T2.s7, paras, "s7", f, null);
-    })();
-    // 8 КАК МЕНЯ ВИДЯТ (timed only)
-    if (timed) {
-      block(T2.s8, [H.asc_style[chart.angles.asc.sign] + "."], "s8", ["ASC " + chart.angles.asc.sign], null);
-    }
-    // 9 САМОЕ НЕОБЫЧНОЕ
-    (function () {
-      var found = null;
-      var outers = ["uranus", "neptune", "pluto"];
-      chart.aspects.forEach(function (a) {
-        if (found) return;
-        if (a.type !== "conjunction" || a.orb > 6) return;
-        var personal = ["sun", "moon", "mercury", "venus", "mars", "asc"];
-        if (outers.indexOf(a.a) !== -1 && personal.indexOf(a.b) !== -1) found = a;
-        if (outers.indexOf(a.b) !== -1 && personal.indexOf(a.a) !== -1) found = a;
-      });
-      var paras = [];
-      var f = [];
-      if (found) {
-        paras.push(H.section_phrases.s9_conj
-          .replace("{a}", bodyName(found.a)).replace("{b}", bodyName(found.b)).replace("{orb}", found.orb));
-        f.push(found.a + "=" + found.b + " " + found.orb + "°");
-      }
-      ["mercury", "venus", "mars"].forEach(function (k) {
-        if (chart.planets[k] && chart.planets[k].retrograde) {
-          paras.push(H.section_phrases.s9_retro.replace("{body}", bodyName(k)));
-          f.push(k + " R");
-        }
-      });
-      if (!paras.length) paras.push(T2.no_unusual);
-      block(T2.s9, paras, "s9", f, null);
-    })();
-
-    // 10 ПОЧЕМУ SFERA ТАК ГОВОРИТ
-    (function () {
-      var b = el("section");
-      b.className = "hr-block";
-      b.appendChild(txt("h3", T2.s10));
-      b.appendChild(txt("p", H.section_phrases.s10_explain, "small"));
-      var ul = el("ul");
-      ev.forEach(function (e) {
-        ul.appendChild(txt("li", H.section_phrases.s10_factor
-          .replace("{section}", e.section).replace("{factors}", e.factors.join(", ")), "small"));
-      });
-      b.appendChild(ul);
-      b.appendChild(txt("p", H.section_phrases.s10_note
-        .replace("{version}", H.meta.version).replace("{school}", H.meta.school), "small"));
-      b.appendChild(txt("p", H.meta.honesty, "small"));
-      box.appendChild(b);
-    })();
-
-    // honest forecast placeholder + other systems note
-    var fx = el("section");
-    fx.className = "hr-block";
-    fx.appendChild(txt("h3", T2.forecast));
-    fx.appendChild(txt("p", T2.forecast_note, "small"));
-    fx.appendChild(txt("p", T2.other_systems, "small"));
-    box.appendChild(fx);
-    if (!timed) box.appendChild(txt("p", T2.time_unknown_note, "small"));
-
-    return box;
+    var ui = { el: el, txt: txt, t: hr2() };
+    return root.SFERA_READING2.build(chart, hr2(), ui);
   }
 
   // ---------------------------------------------------------------- rendering
@@ -425,6 +216,20 @@
 
   function renderChart(birth, cfg, chart, question, placeLabel) {
     var box = el("div");
+
+    // HUMAN READING FIRST (EXECUTION_005): the portrait is the product; trust
+    // information stays accessible but moves into the technical layer below.
+    var human = buildHumanReading(chart);
+    box.appendChild(human);
+
+    var tech = el("details");
+    tech.className = "tech";
+    var sum = el("summary");
+    sum.textContent = (hr2() && hr2().titles.tech_h) || "Chart data & technical details";
+    tech.appendChild(sum);
+    var techBody = el("div");
+    tech.appendChild(techBody);
+
     var chips = el("div");
     [chip(tr("result.chip_calculated", { id: chart.engine.id, ver: chart.engine.version })),
      chip(tr("result.chip_static")),
@@ -434,20 +239,7 @@
      chip(tr("result.chip_zodiac", { v: chart.provenance.zodiac })),
      chip(tr("result.chip_houses", { v: tr("names.house_systems." + cfg.house_system) || cfg.house_system }))
     ].forEach(function (c) { if (c) chips.appendChild(c); });
-    box.appendChild(chips);
-
-    // HUMAN READING first (EXECUTION_004 addendum): clean prose on top,
-    // technical layers expandable underneath. Calculation unchanged.
-    var human = buildHumanReading(chart);
-    box.appendChild(human);
-
-    var tech = el("details");
-    tech.className = "tech";
-    var sum = el("summary");
-    sum.textContent = (hr() && hr().titles.tech_summary) || "Chart data & technical details";
-    tech.appendChild(sum);
-    var techBody = el("div");
-    tech.appendChild(techBody);
+    techBody.appendChild(chips);
 
     techBody.appendChild(txt("h2", tr("result.planets")));
     var rows = [];

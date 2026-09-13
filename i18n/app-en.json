@@ -102,23 +102,23 @@
   "copied": "Copied ✓",
   "feedback_h": "Help the research: 5 short questions (anonymous, optional)",
   "feedback_intro": "Answers are stored separately from the funnel; only a random session id links them. They are never linked to birth data — outside your device none exists. Do not include personal data in free text.",
-  "f1": "1. Was the result understandable?",
+  "f1": "1. Was it interesting to read?",
   "f1_opts": [
    "Yes",
-   "Partly",
+   "Not really",
    "No"
   ],
-  "f2": "2. Was there anything that felt specifically relevant to you?",
+  "f2": "2. Did you recognize yourself in the description?",
   "f2_ph": "If yes — what, briefly",
-  "f3": "3. Was there anything that felt too generic or simply wrong?",
+  "f3": "3. What felt especially accurate or unexpected?",
   "f3_ph": "If yes — what, briefly",
-  "f4": "4. Would you come back with another timing/event question?",
+  "f4": "4. What felt generic, unclear, or wrong?",
   "f4_opts": [
    "Yes",
    "Maybe",
    "No"
   ],
-  "f5": "5. Free comment (optional, no personal data)",
+  "f5": "5. Would you want a continuation — relationships, the near period, compatibility?",
   "f5_ph": "What to improve, what was unclear…",
   "f_send": "Send anonymously",
   "f_sent": "Thank you — your answers were sent anonymously.",
@@ -126,7 +126,17 @@
   "f_consent_off": "Sending answers requires the anonymous-measurement consent (checkbox in the form) — without it, nothing is sent.",
   "geo_attribution": "Place search: Open-Meteo Geocoding API, GeoNames data (CC-BY 4.0)",
   "chip_local_geo": "CALCULATED LOCALLY — only the place name went to the network (place search); date, time and chart did not",
-  "chip_nomemory_consented": "NO SERVER-SIDE MEMORY — only your consent flag is stored, in your own browser"
+  "chip_nomemory_consented": "NO SERVER-SIDE MEMORY — only your consent flag is stored, in your own browser",
+  "f2_opts": [
+   "Yes",
+   "Partly",
+   "No"
+  ],
+  "f5_opts": [
+   "Yes",
+   "Not sure",
+   "No"
+  ]
  },
  "reading": {
   "title": "SFERA LAB — STATIC TEMPLATE READING (no AI in this reading)",
