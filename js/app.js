@@ -142,7 +142,7 @@
       return b;
     }
     var ui = { el: el, txt: txt, t: hr2() };
-    return root.SFERA_READING2.build(chart, hr2(), ui);
+    return window.SFERA_READING2.build(chart, hr2(), ui);
   }
 
   // ---------------------------------------------------------------- rendering

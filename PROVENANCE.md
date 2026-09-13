@@ -3,7 +3,7 @@
 This site is the public surface of SFERA Lab (research prototype), built by
 `tools/build_public_site.py` in the private lab repository.
 
-- build date: 2026-09-13 (2026-09-13T09:10:40Z)
+- build date: 2026-09-13 (2026-09-13T09:24:21Z)
 - languages: RU (default, canonical root) + EN mirrors under /en/ (founder hot patch,
   EXECUTION_004); localization layer: web/site/i18n/site-*.json (build-time) +
   i18n/app-*.json (runtime); calculation engine is language-free
