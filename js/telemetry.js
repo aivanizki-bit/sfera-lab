@@ -155,8 +155,15 @@
         }
       } catch (e) { /* storage unavailable: session-only */ }
       if (value) {
-        // Mid-session consent: the visit itself becomes sendable from that moment on.
+        // Mid-session consent: the visit itself becomes sendable from that moment on,
+        // and the stages already reached in this session are replayed from page memory
+        // (disclosed on /privacy: consenting covers this session's stages, including
+        // ones reached before ticking the box).
         if (!this._trafficQueued) { this._trafficQueued = true; this._push("traffic_in", {}); this._maybeReturnVisit(); }
+        var self = this;
+        this.sessionEvents.forEach(function (e) {
+          if (!e._queued) { e._queued = true; self.queue.push(e); }
+        });
         this.flush();
       }
     },
@@ -181,6 +188,7 @@
 
       if (!SINK_URL) return rec;                    // honest v1 behavior: nowhere to send
       if (!this.consented()) return rec;            // nothing is sent without consent
+      rec._queued = true;
       this.queue.push(rec);
       this._scheduleFlush();
       return rec;

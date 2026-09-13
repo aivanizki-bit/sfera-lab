@@ -166,8 +166,12 @@
    * alternate-name coverage has gaps: «Кагул» misses Cahul; "Kagul" hits it).
    * Any single request may fail without sinking the whole search. */
   function search(query, localCities, lang) {
-    var q = String(query || "").trim().slice(0, 80);
-    if (q.length < 2) return Promise.resolve({ ok: true, results: [], stale: false });
+    var raw = String(query || "").trim().slice(0, 80);
+    if (raw.length < 2) return Promise.resolve({ ok: true, results: [], stale: false });
+    // users type "Тюмень, Россия" — match on the locality part, keep the raw string
+    // only for display; prevents comma-suffix queries from ranking unrelated cities
+    var q = raw.split(",")[0].trim() || raw;
+    if (q.length < 2) q = raw;
 
     var key = norm(q) + "|" + lang;
     if (cache[key]) return Promise.resolve({ ok: true, results: cache[key], stale: false });

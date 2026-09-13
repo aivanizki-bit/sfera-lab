@@ -44,7 +44,7 @@
 <h2>Приватность</h2>
 <p>Расчёт идёт в вашем браузере; данные рождения не покидают устройство; сервера для их приёма не существует. Полное объяснение: <a href="privacy.html">страница приватности</a> — включая честное описание того, что отправляет поиск места рождения.</p>
 <h2>Раскрываемость поиска мест</h2>
-<p>Поиск места использует гибрид: встроенный короткий список городов (координаты ≈±1 км, класс верификации UNVERIFIED_COMPILED_LIST) плюс глобальный каталог Open-Meteo/GeoNames (CC-BY 4.0; запрос отправляется только в момент поиска; точность каталога — порядка километра, кроме малых населённых пунктов). Часовой пояс берётся как имя IANA и применяется с полной исторической базой tzdb. Для архивной точности вводите широту/долготу и часовой пояс вручную. Регрессионные кейсы разрешения мест (в т.ч. Тюмень и Кагул) зафиксированы в репозитории лаборатории.</p>
+<p>Поиск места использует гибрид: встроенный короткий список городов (координаты ≈±1 км, класс верификации UNVERIFIED_COMPILED_LIST) плюс глобальный каталог Open-Meteo/GeoNames (CC-BY 4.0; запрос отправляется только в момент поиска; точность каталога — порядка километра, кроме малых населённых пунктов). Часовой пояс берётся как имя IANA и применяется с полной исторической базой tzdb. Для архивной точности вводите широту/долготу и часовой пояс вручную. Ранжирование подсказок: точные совпадения выше префиксных, выше нечётких вариантов на одну букву («Кагул» ↔ «Кахул»); крупный город (≥100 тыс.) поднимается над безлюдным поселением с тем же написанием — все варианты остаются в списке, меняется только порядок. Регрессионные кейсы (в т.ч. Тюмень и Кагул) зафиксированы в репозитории лаборатории.</p>
 <footer>
 <hr>
 <p class="small">SFERA Lab — исследовательский прототип, не продукт · движок sfera-western-js 0.1.0-js.1 (браузерный порт sfera-western 0.1.0) · без аккаунтов, без слежки, без сервера расчёта · <a href="about.html">Методология</a> · <a href="privacy.html">Приватность</a> · <a href="lab-status.html">Статус исследований</a> · только 18+</p>
@@ -53,8 +53,8 @@
 <script src="js/astronomy.browser.min.js" integrity="sha384-LTVHvxfbG3XHla4Lu0C0s9U18B2sBOuzJIeOoVHm2t05SOOORvMbBMEVjXrGau9g" crossorigin="anonymous"></script>
 <script src="js/sfera_engine.js" integrity="sha384-KIATxuj5k4JMF1giAWqOHjr19UPkKPYPuQefKx5R+RgIFrTwOxZ0afq+CdrvsyRZ" crossorigin="anonymous"></script>
 <script src="js/telemetry_config.js" integrity="sha384-8AUZLrIeW+tw/q3HrUzURcpvlZ0y8GVWcr1Aydgn6uV/kzaFj8cknkIzP+9DHNjK" crossorigin="anonymous"></script>
-<script src="js/telemetry.js" integrity="sha384-qW6rULOwZb9Oovc/G5zGEr61e6KEIpqg/rwlzz7NIszXgZRzhgd/mNXXdwQpDaYe" crossorigin="anonymous"></script>
-<script src="js/places.js" integrity="sha384-3KgLRaPi6l9V/U+NkfMp/S4it8Ztc9Ofg+qC6jDUJ61itUsMcRC3i0x1OAZfkivr" crossorigin="anonymous"></script>
-<script src="js/app.js" integrity="sha384-PCHMI2oh+Me1rCHM65a6s5dHIht9PY3MOttCXSaBDEByaPc06dmYAtYt0J8PGTVA" crossorigin="anonymous"></script>
+<script src="js/telemetry.js" integrity="sha384-HJe38uODgSvCQHh/d24Jyy6nQAyTenlsqLNq8i+uJn9Eg3KYOWyNeFivhIGvLIoK" crossorigin="anonymous"></script>
+<script src="js/places.js" integrity="sha384-shFYHfHngnt6U8LUBe6HHNXgyCa4XeDaJeDT1rKSFeUBRWlBTmIAYJW4fWk6oTTO" crossorigin="anonymous"></script>
+<script src="js/app.js" integrity="sha384-k0agqITmNgbynjPSj/Z5rXMtJlXEHObyPwKb5e4YdvI2o5wszp7dw2UAqEiv4jg/" crossorigin="anonymous"></script>
 </body>
 </html>

@@ -429,8 +429,8 @@
     [chip(tr("result.chip_calculated", { id: chart.engine.id, ver: chart.engine.version })),
      chip(tr("result.chip_static")),
      placeLabel ? chipPlace(placeLabel) : null,
-     chip(tr("result.chip_local")),
-     chip(tr("result.chip_nomemory")),
+     chip(placeLabel && placeLabel.source === "open-meteo" ? tr("result.chip_local_geo") : tr("result.chip_local")),
+     chip(T.consented() ? tr("result.chip_nomemory_consented") : tr("result.chip_nomemory")),
      chip(tr("result.chip_zodiac", { v: chart.provenance.zodiac })),
      chip(tr("result.chip_houses", { v: tr("names.house_systems." + cfg.house_system) || cfg.house_system }))
     ].forEach(function (c) { if (c) chips.appendChild(c); });
@@ -704,7 +704,7 @@
 
   // ---------------------------------------------------------------- city picker (accessible combobox)
 
-  var picker = { input: null, list: null, status: null, open: false, options: [], active: -1, place: null, deb: null };
+  var picker = { input: null, list: null, status: null, open: false, options: [], active: -1, place: null, auto: false, deb: null };
 
   function fmtPlacePrimary(p) {
     var parts = [p.name];
@@ -756,6 +756,7 @@
 
   function pickPlace(p) {
     picker.place = p;
+    picker.auto = true;
     picker.input.value = fmtPlacePrimary(p);
     document.getElementById("lat").value = p.lat;
     document.getElementById("lon").value = p.lon;
@@ -804,6 +805,10 @@
     if (status) status.setAttribute("aria-live", "polite");
 
     input.addEventListener("input", function () {
+      if (picker.auto) { // a previous pick auto-filled these; stale values would silently misplace the chart
+        picker.auto = false;
+        ["lat", "lon", "tz"].forEach(function (id) { var f = document.getElementById(id); if (f) f.value = ""; });
+      }
       picker.place = null; // typed text invalidates a previous structured pick
       if (picker.deb) clearTimeout(picker.deb);
       var q = input.value;
@@ -863,7 +868,7 @@
       } catch (e) {
         var cls = (e && e.message === "NONEXISTENT_LOCAL_TIME_DST_GAP") ? "DST_GAP"
           : (e && e.message === "INVALID_DATE_OR_TIME") ? "INVALID_DATE_OR_TIME" : "OTHER_ENGINE";
-        T.track("calculation_error", { err_class: cls });
+        T.track("calculation_error", { err: cls });
         if (e && e.message === "NONEXISTENT_LOCAL_TIME_DST_GAP") {
           showError(result, tr("errors.dst_gap_title"), tr("errors.dst_gap"));
         } else if (e && e.message === "INVALID_DATE_OR_TIME") {
