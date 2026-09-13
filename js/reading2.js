@@ -120,6 +120,8 @@
       return { body: dot(body), factors: [capName(a) + " — " + capName(b) + (d ? " (орб " + d.orb + "°)" : "")] };
     }
     function signRu(sign) { return (KB.meta.signs_gen && KB.meta.signs_gen[sign]) || sign; }
+    var RU_E = { fire: "огонь", earth: "земля", air: "воздух", water: "вода" };
+    function ruE(e) { return RU_E[e] || e; }
     function capName(k) {
       var names = { sun: "Солнце", moon: "Луна", mercury: "Меркурий", venus: "Венера", mars: "Марс",
         jupiter: "Юпитер", saturn: "Сатурн", uranus: "Уран", neptune: "Нептун", pluto: "Плутон",
@@ -162,7 +164,7 @@
     var l1f = ["Солнце в " + signRu(sun.sign)];
     l1.push(cap(KB.sun[sun.sign].core));
     if (!moonSup) {
-      l1.push("Внутри вы устроены чувствительнее, чем может казаться: " + KB.moon[moon.sign].need);
+      l1.push("Внутренняя опора у вас при этом другая: " + KB.moon[moon.sign].need);
       l1f.push("Луна в " + signRu(moon.sign));
     }
     if (moonSup) {
@@ -171,13 +173,13 @@
     }
     if (ascE) {
       var maskText = String(KB.asc[chart.angles.asc.sign].mask).split(": ").slice(1).join(": ");
-      l1.push("Со стороны вас чаще всего читают иначе — как " + maskText + ". Это не маска, просто наружный слой устроен по своим правилам.");
+      l1.push("Со стороны вас при этом чаще читают как человека " + maskText + ".");
       l1f.push("Асцендент в " + signRu(chart.angles.asc.sign));
       if (!moonSup && moonE !== ascE) {
         var mmL1 = mismatchOnce(moonE, ascE);
         if (mmL1) {
           l1.push(mmL1.body || mmL1);
-          l1f.push("Луна/Асцендент в разных стихиях (" + moonE + " vs " + ascE + ")");
+          l1f.push("Луна/Асцендент в разных стихиях (" + ruE(moonE) + " против " + ruE(ascE) + ")");
         }
       }
     }
@@ -263,7 +265,7 @@
       p(KB.asc[chart.angles.asc.sign].inside_note, "Асцендент — что не видно");
       if (!moonSup && moonE !== ascE) {
         var mm = mismatchOnce(moonE, ascE);
-        if (mm) p(mm.body || mm, "Стихия Луны (" + moonE + ") и Асцендента (" + ascE + ") различаются");
+        if (mm) p(mm.body || mm, "Стихия Луны (" + ruE(moonE) + ") и Асцендента (" + ruE(ascE) + ") различаются");
       }
     });
 
@@ -300,9 +302,9 @@
 
     // Сильные стороны
     l2sec(TT("titles.s_strong"), function (p, _b, factors) {
-      if (domOk) p(KB.elements["dominant_" + domE], "доминирующая стихия: " + domE + " (" + ec[domE] + " из 6 опорных точек)");
-      else p(KB.elements.balanced, "стихии распределены ровно: " + ec.fire + "/" + ec.earth + "/" + ec.air + "/" + ec.water);
-      if (ec[lackE] === 0) p(KB.elements["lacking_" + lackE], "почти отсутствующая стихия: " + lackE);
+      if (timed && domOk) p(KB.elements["dominant_" + domE], "доминирующая стихия: " + ruE(domE) + " (" + ec[domE] + " из 6 опорных точек)");
+      else if (timed && ec[lackE] > 0) p(KB.elements.balanced, "стихии распределены ровно: " + ec.fire + "/" + ec.earth + "/" + ec.air + "/" + ec.water);
+      if (timed && ec[lackE] === 0) p(KB.elements["lacking_" + lackE], "почти отсутствующая стихия: " + ruE(lackE));
       var softs = chart.aspects.filter(function (x) { return x.type === "trine" || x.type === "sextile"; })
         .filter(function (x) { var a = PERSONAL.indexOf(x.a) !== -1, b = PERSONAL.indexOf(x.b) !== -1; return a && b; })
         .sort(function (m, n) { return m.orb - n.orb; }).slice(0, 2);
@@ -326,7 +328,7 @@
       hards.forEach(function (a) {
         if (taken >= 1) return;
         var dbody = dynForAspect(a.a, a.b, a.type);
-        if (dbody && !dbody._used) { p(dbody.body + " Это не приговор — просто ваш рабочий узел: он же даёт вам энергию, когда вы с ним справляетесь."); dbody.factors.forEach(function (f) { factors.push(f); }); taken++; }
+        if (dbody && !dbody._used) { p(dbody.body + " Это не приговор — просто ваша точка роста: она же даёт вам энергию, когда вы с ней справляетесь."); dbody.factors.forEach(function (f) { factors.push(f); }); taken++; }
       });
       if (!taken) p("В давящей ситуации вашим узлом становится вот это: " + KB.mars[mars.sign].anger + " Зная это про себя, вы успеваете выбрать реакцию, а не получить её автоматически.", "Марс в " + signRu(mars.sign) + " — гнев под давлением");
     });
@@ -338,7 +340,7 @@
       var mmSM = mismatchOnce(sunE, moonE);
       if (smHard || (sunE !== moonE && mmSM)) {
         p(mmSM ? (mmSM.body || mmSM) : dot(KB.dynamics.hard_sun_moon),
-          "Стихии Солнца (" + sunE + ") и Луны (" + (moonSup ? "n/a" : moonE) + ") различаются");
+          "Стихии Солнца (" + ruE(sunE) + ") и Луны (" + (moonSup ? "нет данных" : ruE(moonE)) + ") различаются");
       }
       var dsm = smHard ? dyn("hard_sun_moon") : null;
       if (dsm) { p(dot(dsm), "Солнце — Луна, напряжённый аспект (орб " + sm.orb + "°)"); }
@@ -359,7 +361,7 @@
     // Работа и амбиции
     l2sec(TT("titles.s_work"), function (p, _b, factors) {
       p(cap(KB.saturn_work[chart.planets.saturn.sign]) + ".", "Сатурн в " + signRu(chart.planets.saturn.sign) + " — стиль ответственности");
-      p(cap(KB.mars[mars.sign].stamina) + " В связке с тем, что " + KB.sun[sun.sign].core + ", ваш рабочий почерк получается узнаваемым: не самым шумным, но своим.", "Марс в " + signRu(mars.sign) + " + Солнце в " + sun.sign);
+      p(cap(KB.mars[mars.sign].stamina), "Марс в " + signRu(mars.sign) + " — настойчивость");
       p("Важно: карта описывает стиль, а не должность и не доход. Ни один текст здесь не является обещанием результата.", "граница интерпретации");
     });
 
@@ -376,7 +378,7 @@
         var dbody = dynForAspect(tight.a, tight.b, tight.type);
         if (dbody && !dbody._used) { p("Самая плотная связь в вашей карте выглядит так: " + dbody.body); dbody.factors.forEach(function (f) { factors.push(f); }); }
       }
-      if (!usedSpecial) p("Ярких редких конфигураций в этой карте нет — портрет выше и есть самое главное. Это честный результат, а не пропущенный раздел.", "");
+      if (!usedSpecial) p("Особенно редких переплетений в этой карте немного — самый важный текст уже прочитан выше. Это честный результат, а не пропущенный раздел.", "");
     });
 
     root_.appendChild(ui.txt("p", TT("titles.disclaimer"), "small"));
