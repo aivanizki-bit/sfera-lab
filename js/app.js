@@ -47,7 +47,18 @@
     .catch(function () {
       return fetch(ASSET_ROOT + "i18n/app-en.json").then(function (r) { return r.json(); });
     })
-    .then(function (d) { t = d || {}; wireCityPicker(); })
+    .then(function (d) {
+      t = d || {};
+      if (LANG === "ru") {
+        // human-reading phrase library (EXECUTION_004 addendum prototype, hr-v0.1)
+        return fetch(ASSET_ROOT + "i18n/reading-ru.json")
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (hr) { t._hr = hr || null; })
+          .catch(function () { t._hr = null; });
+      }
+      t._hr = null;
+    })
+    .then(function () { wireCityPicker(); })
     .catch(function () { t = {}; wireCityPicker(); });
 
   var cities = null;
@@ -112,6 +123,235 @@
     }
     return { birth: { date: date, time: time || null, place: { lat: lat, lon: lon, tz: tzName } },
       houses: houses, question: question || null, placeLabel: placeLabel };
+  }
+
+  // ---------------------------------------------------------------- human reading (hr-v0.1 prototype)
+  /* DETERMINISTIC composition over the verified chart structure + the labeled phrase
+   * library (i18n/reading-ru.json). No AI at runtime, no network, nothing sent. Every
+   * block keeps an internal evidence trail (factors used) rendered in section 10 —
+   * "the user sees clean prose, the Lab retains the evidence chain". Forecasting is
+   * honestly NOT_IMPLEMENTED (needs a deterministic transit layer); natal data alone
+   * never fabricates a "today/month/year" reading. */
+
+  function hr() { return dictGet(["_hr"]); }
+
+  function houseOf(lon, cusps) {
+    for (var i = 0; i < 12; i++) {
+      var a = cusps[i].longitude, b = cusps[(i + 1) % 12].longitude;
+      if (((b - a + 360) % 360) > ((lon - a + 360) % 360)) return i + 1;
+    }
+    return null;
+  }
+
+  function factorStr(bodyKey, chart, withHouse) {
+    var v = chart.planets[bodyKey];
+    if (!v || !v.sign) return null;
+    var s = bodyName(bodyKey) + " в " + (hr().meta.signs_gen[v.sign] || v.sign) + " (" + v.dms + " " + v.sign + ")";
+    if (withHouse && chart.houses) {
+      var h = houseOf(v.longitude, chart.houses.cusps);
+      if (h) s += " · дом " + h;
+    }
+    return s;
+  }
+
+  function aspectsOf(chart, keys, types) {
+    return chart.aspects.filter(function (a) {
+      return (keys.indexOf(a.a) !== -1) && (keys.indexOf(a.b) !== -1) &&
+        (!types || types.indexOf(a.type) !== -1);
+    }).sort(function (x, y) { return x.orb - y.orb; });
+  }
+
+  function buildHumanReading(chart) {
+    var box = el("div");
+    box.className = "human-reading";
+    if (LANG !== "ru" || !hr()) {
+      box.appendChild(txt("h2", "What the chart says — human reading"));
+      box.appendChild(txt("p", "Human Reading prototype: this research build ships it in Russian only. The complete technical chart is below.", "small"));
+      return box;
+    }
+    var H = hr(), T2 = H.titles, timed = !!(chart.angles && chart.houses);
+    var ev = []; // evidence trail {section, factors}
+
+    function block(title, paras, sectionId, factors, conf) {
+      var b = el("section");
+      b.className = "hr-block";
+      b.appendChild(txt("h3", title));
+      paras.forEach(function (p) { b.appendChild(txt("p", p)); });
+      if (conf) b.appendChild(txt("p", conf, "small"));
+      if (factors && factors.length) ev.push({ section: title, factors: factors });
+      box.appendChild(b);
+      return b;
+    }
+    function fmajor(k) { return (H.meta.aspects[k]); }
+
+    box.appendChild(txt("h2", T2.h2));
+    box.appendChild(txt("p", T2.intro, "small"));
+
+    var sun = chart.planets.sun;
+    // 1 КТО Я
+    (function () {
+      var paras = [H.sun_sign[sun.sign]];
+      var f = ["Sun " + sun.sign];
+      if (timed) {
+        var h = houseOf(sun.longitude, chart.houses.cusps);
+        if (h) { paras.push(H.house_domain[String(h)] + "."); f.push("Sun house " + h); }
+      }
+      block(T2.s1, paras, "s1", f, null);
+    })();
+    // 2 СИЛЬНЫЕ СТОРОНЫ
+    (function () {
+      var paras = [H.section_phrases.s2_intro];
+      var f = [];
+      var good = aspectsOf(chart, ["sun", "moon", "mercury", "venus", "mars", "saturn", "jupiter"], ["trine", "sextile"]).slice(0, 3);
+      good.forEach(function (a) {
+        paras.push(H.section_phrases.s2_aspect
+          .replace("{a}", bodyName(a.a)).replace("{b}", bodyName(a.b))
+          .replace("{type}", fmajor(a.type)).replace("{flavor}", H.aspect_flavor[a.type]));
+        f.push(a.a + "-" + a.b + " " + a.type);
+      });
+      paras.push(H.section_phrases.s2_jupiter
+        .replace("{sign}", hr().meta.signs_gen[chart.planets.jupiter.sign])
+        .replace("{domain_j}", H.domain_jupiter[chart.planets.jupiter.sign]));
+      f.push("Jupiter " + chart.planets.jupiter.sign);
+      if (!good.length) paras.push("Гармоничных связей личных планет немного — сильные стороны этой карты скорее в устойчивости её ядерных положений, чем в «лёгких» аспектах.");
+      block(T2.s2, paras, "s2", f, null);
+    })();
+    // 3 ПРОТИВОРЕЧИЯ
+    (function () {
+      var hard = aspectsOf(chart, ["sun", "moon", "mercury", "venus", "mars"], ["square", "opposition"]).slice(0, 3);
+      if (!hard.length) { block(T2.s3, [T2.no_tension], "s3", [], null); return; }
+      var paras = [H.section_phrases.s3_intro];
+      hard.forEach(function (a) {
+        paras.push(H.section_phrases.s3_aspect
+          .replace("{a}", bodyName(a.a)).replace("{b}", bodyName(a.b))
+          .replace("{type}", fmajor(a.type)).replace("{flavor}", H.aspect_flavor[a.type]));
+      });
+      block(T2.s3, paras, "s3", hard.map(function (a) { return a.a + "-" + a.b + " " + a.type; }), null);
+    })();
+    // 4 ЭМОЦИИ
+    (function () {
+      var moon = chart.planets.moon;
+      if (!moon || moon.suppressed) {
+        block(T2.s4, ["Луна требует времени рождения — без него этот раздел честно пуст (см. примечание в начале)."], "s4", [], null);
+        return;
+      }
+      var paras = [H.moon_sign[moon.sign]];
+      var f = ["Moon " + moon.sign];
+      if (timed) {
+        var h = houseOf(moon.longitude, chart.houses.cusps);
+        if (h) { paras.push(H.section_phrases.s4_house.replace("{n}", h).replace("{domain}", H.house_domain[String(h)].replace("сфера: ", ""))); f.push("Moon house " + h); }
+      }
+      var ma = aspectsOf(chart, ["moon"], null)[0];
+      if (ma) {
+        var other = ma.a === "moon" ? ma.b : ma.a;
+        paras.push("Луна и " + bodyName(other) + " (" + fmajor(ma.type) + ") " + H.aspect_flavor[ma.type] + ".");
+        f.push("Moon-" + other + " " + ma.type);
+      }
+      block(T2.s4, paras, "s4", f, null);
+    })();
+    // 5 МЫШЛЕНИЕ
+    (function () {
+      var m = chart.planets.mercury;
+      var paras = [H.mercury_sign[m.sign]];
+      var f = ["Mercury " + m.sign];
+      if (timed) {
+        var h = houseOf(m.longitude, chart.houses.cusps);
+        if (h) { paras.push(H.section_phrases.s5_house.replace("{n}", h).replace("{domain}", H.house_domain[String(h)].replace("сфера: ", ""))); f.push("Mercury house " + h); }
+      }
+      block(T2.s5, paras, "s5", f, null);
+    })();
+    // 6 ЛЮБОВЬ
+    (function () {
+      var paras = [H.venus_sign[chart.planets.venus.sign], H.mars_sign[chart.planets.mars.sign]];
+      var f = ["Venus " + chart.planets.venus.sign, "Mars " + chart.planets.mars.sign];
+      if (timed) {
+        var hv = houseOf(chart.planets.venus.longitude, chart.houses.cusps);
+        var hm = houseOf(chart.planets.mars.longitude, chart.houses.cusps);
+        if (hv) paras.push(H.section_phrases.s6_venus_house.replace("{n}", hv).replace("{domain}", H.house_domain[String(hv)].replace("сфера: ", "")));
+        if (hm) paras.push(H.section_phrases.s6_mars_house.replace("{n}", hm).replace("{domain}", H.house_domain[String(hm)].replace("сфера: ", "")));
+        if (hv) f.push("Venus house " + hv);
+        if (hm) f.push("Mars house " + hm);
+      }
+      block(T2.s6, paras, "s6", f, null);
+    })();
+    // 7 РАБОТА
+    (function () {
+      var paras = [];
+      var sat = chart.planets.saturn;
+      var f = ["Saturn " + sat.sign];
+      if (timed) {
+        var h = houseOf(sat.longitude, chart.houses.cusps);
+        paras.push(H.section_phrases.s7_saturn
+          .replace("{sign}", H.meta.signs_gen[sat.sign]).replace("{n}", h || "—")
+          .replace("{domain}", h ? H.house_domain[String(h)].replace("сфера: ", "") : "—"));
+        if (h) f.push("Saturn house " + h);
+        paras.push(H.section_phrases.s7_mc.replace("{sign}", H.meta.signs_gen[chart.angles.mc.sign]));
+        f.push("MC " + chart.angles.mc.sign);
+      } else {
+        paras.push("Сатурн в знаке " + (H.meta.signs_gen[sat.sign]) + " — " + "зона долгого труда: здесь вы взрослеете годами, и здесь же строится настоящий авторитет. MC и дома требуют времени рождения, поэтому публичная роль в этой карте не разбирается. Важно: астрология не определяет карьерный исход — традиция описывает, где видит нагрузку и потенциал.");
+      }
+      block(T2.s7, paras, "s7", f, null);
+    })();
+    // 8 КАК МЕНЯ ВИДЯТ (timed only)
+    if (timed) {
+      block(T2.s8, [H.asc_style[chart.angles.asc.sign] + "."], "s8", ["ASC " + chart.angles.asc.sign], null);
+    }
+    // 9 САМОЕ НЕОБЫЧНОЕ
+    (function () {
+      var found = null;
+      var outers = ["uranus", "neptune", "pluto"];
+      chart.aspects.forEach(function (a) {
+        if (found) return;
+        if (a.type !== "conjunction" || a.orb > 6) return;
+        var personal = ["sun", "moon", "mercury", "venus", "mars", "asc"];
+        if (outers.indexOf(a.a) !== -1 && personal.indexOf(a.b) !== -1) found = a;
+        if (outers.indexOf(a.b) !== -1 && personal.indexOf(a.a) !== -1) found = a;
+      });
+      var paras = [];
+      var f = [];
+      if (found) {
+        paras.push(H.section_phrases.s9_conj
+          .replace("{a}", bodyName(found.a)).replace("{b}", bodyName(found.b)).replace("{orb}", found.orb));
+        f.push(found.a + "=" + found.b + " " + found.orb + "°");
+      }
+      ["mercury", "venus", "mars"].forEach(function (k) {
+        if (chart.planets[k] && chart.planets[k].retrograde) {
+          paras.push(H.section_phrases.s9_retro.replace("{body}", bodyName(k)));
+          f.push(k + " R");
+        }
+      });
+      if (!paras.length) paras.push(T2.no_unusual);
+      block(T2.s9, paras, "s9", f, null);
+    })();
+
+    // 10 ПОЧЕМУ SFERA ТАК ГОВОРИТ
+    (function () {
+      var b = el("section");
+      b.className = "hr-block";
+      b.appendChild(txt("h3", T2.s10));
+      b.appendChild(txt("p", H.section_phrases.s10_explain, "small"));
+      var ul = el("ul");
+      ev.forEach(function (e) {
+        ul.appendChild(txt("li", H.section_phrases.s10_factor
+          .replace("{section}", e.section).replace("{factors}", e.factors.join(", ")), "small"));
+      });
+      b.appendChild(ul);
+      b.appendChild(txt("p", H.section_phrases.s10_note
+        .replace("{version}", H.meta.version).replace("{school}", H.meta.school), "small"));
+      b.appendChild(txt("p", H.meta.honesty, "small"));
+      box.appendChild(b);
+    })();
+
+    // honest forecast placeholder + other systems note
+    var fx = el("section");
+    fx.className = "hr-block";
+    fx.appendChild(txt("h3", T2.forecast));
+    fx.appendChild(txt("p", T2.forecast_note, "small"));
+    fx.appendChild(txt("p", T2.other_systems, "small"));
+    box.appendChild(fx);
+    if (!timed) box.appendChild(txt("p", T2.time_unknown_note, "small"));
+
+    return box;
   }
 
   // ---------------------------------------------------------------- rendering
@@ -196,7 +436,20 @@
     ].forEach(function (c) { if (c) chips.appendChild(c); });
     box.appendChild(chips);
 
-    box.appendChild(txt("h2", tr("result.planets")));
+    // HUMAN READING first (EXECUTION_004 addendum): clean prose on top,
+    // technical layers expandable underneath. Calculation unchanged.
+    var human = buildHumanReading(chart);
+    box.appendChild(human);
+
+    var tech = el("details");
+    tech.className = "tech";
+    var sum = el("summary");
+    sum.textContent = (hr() && hr().titles.tech_summary) || "Chart data & technical details";
+    tech.appendChild(sum);
+    var techBody = el("div");
+    tech.appendChild(techBody);
+
+    techBody.appendChild(txt("h2", tr("result.planets")));
     var rows = [];
     SE.BODIES.forEach(function (b) {
       var v = chart.planets[b];
@@ -204,36 +457,36 @@
         v.retrograde ? tr("result.retrograde") : "", v.speed_lon_per_day.toFixed(4) + "\u00B0/" + (LANG === "ru" ? "день" : "day")]);
       else rows.push([bodyName(b), tr("result.suppressed_paren", { reason: (v && v.reason) || "BIRTH_TIME_UNKNOWN" }), "", ""]);
     });
-    box.appendChild(simpleTable([tr("result.th_body"), tr("result.th_position"), tr("result.th_motion"), tr("result.th_speed")], rows));
+    techBody.appendChild(simpleTable([tr("result.th_body"), tr("result.th_position"), tr("result.th_motion"), tr("result.th_speed")], rows));
 
-    box.appendChild(txt("h2", tr("result.angles")));
+    techBody.appendChild(txt("h2", tr("result.angles")));
     if (chart.angles) {
-      box.appendChild(txt("p", tr("result.asc_mc", { asc: posStr(chart.angles.asc, false), mc: posStr(chart.angles.mc, false) })));
+      techBody.appendChild(txt("p", tr("result.asc_mc", { asc: posStr(chart.angles.asc, false), mc: posStr(chart.angles.mc, false) })));
     } else {
-      box.appendChild(txt("p", tr("result.angles_suppressed")));
+      techBody.appendChild(txt("p", tr("result.angles_suppressed")));
     }
 
-    box.appendChild(txt("h2", tr("result.nodes")));
+    techBody.appendChild(txt("h2", tr("result.nodes")));
     if (chart.nodes && chart.nodes.mean_node) {
       var n = chart.nodes.mean_node;
-      box.appendChild(simpleTable([tr("result.th_node"), tr("result.th_position"), tr("result.th_motion")], [
+      techBody.appendChild(simpleTable([tr("result.th_node"), tr("result.th_position"), tr("result.th_motion")], [
         [tr("result.node_mean"), posStr(n, false), tr("result.retrograde")],
         [tr("result.node_true"), tr("result.node_true_v"), ""]
       ]));
     } else {
-      box.appendChild(txt("p", tr("result.nodes_timed_only")));
+      techBody.appendChild(txt("p", tr("result.nodes_timed_only")));
     }
 
-    box.appendChild(txt("h2", tr("result.cusps")));
-    box.appendChild(txt("p", tr("result.cusps_note"), "small"));
+    techBody.appendChild(txt("h2", tr("result.cusps")));
+    techBody.appendChild(txt("p", tr("result.cusps_note"), "small"));
     if (chart.houses) {
-      box.appendChild(simpleTable([tr("result.th_house"), tr("result.th_cusp", { sys: tr("names.house_systems." + chart.houses.system) || chart.houses.system })],
+      techBody.appendChild(simpleTable([tr("result.th_house"), tr("result.th_cusp", { sys: tr("names.house_systems." + chart.houses.system) || chart.houses.system })],
         chart.houses.cusps.map(function (c, i) { return [String(i + 1), posStr(c, false)]; })));
     } else {
-      box.appendChild(txt("p", tr("result.cusps_suppressed")));
+      techBody.appendChild(txt("p", tr("result.cusps_suppressed")));
     }
 
-    box.appendChild(txt("h2", tr("result.aspects")));
+    techBody.appendChild(txt("h2", tr("result.aspects")));
     var an = dictGet(["names", "aspects"]);
     var arows = chart.aspects.map(function (a) {
       var phase = a.applying === null ? tr("result.phase_to_angle")
@@ -241,22 +494,22 @@
       return [bodyName(a.a) + " \u2014 " + bodyName(a.b) + ": " + ((an && an[a.type]) || a.type),
         tr("result.th_orb").toLowerCase() + " " + a.orb + "\u00B0", phase];
     });
-    box.appendChild(arows.length ? simpleTable([tr("result.th_aspect"), tr("result.th_orb"), tr("result.th_phase")], arows)
+    techBody.appendChild(arows.length ? simpleTable([tr("result.th_aspect"), tr("result.th_orb"), tr("result.th_phase")], arows)
       : txt("p", tr("result.no_aspects")));
 
     var readingPre = txt("pre", localizedReading(chart, question));
-    box.appendChild(txt("h2", tr("result.reading_h")));
-    box.appendChild(readingPre);
-    observeReading(readingPre);
+    techBody.appendChild(txt("h2", tr("result.reading_h")));
+    techBody.appendChild(readingPre);
+    observeReading(human); // v1 rule: the human-reading layer is the consumed surface
 
-    box.appendChild(txt("h2", tr("result.flags_h")));
+    techBody.appendChild(txt("h2", tr("result.flags_h")));
     var flags = el("p");
     chart.flags.forEach(function (f) { flags.appendChild(chip(f)); });
-    box.appendChild(flags);
+    techBody.appendChild(flags);
 
-    box.appendChild(txt("h2", tr("result.provenance_h")));
+    techBody.appendChild(txt("h2", tr("result.provenance_h")));
     var libs = chart.engine.libraries;
-    box.appendChild(simpleTable([tr("result.th_field"), tr("result.th_value")], [
+    techBody.appendChild(simpleTable([tr("result.th_field"), tr("result.th_value")], [
       [tr("result.p_engine"), chart.engine.id + " " + chart.engine.version + " (schema " + chart.schema_version + ")"],
       [tr("result.p_poslib"), libs["astronomy-engine"]],
       [tr("result.p_houses"), libs["houses/nodes"]],
@@ -266,10 +519,12 @@
       [tr("result.p_computed"), tr("result.p_computed_v", { ts: chart.provenance.computed_at })]
     ]));
 
-    box.appendChild(txt("h2", tr("result.limits_h")));
+    techBody.appendChild(txt("h2", tr("result.limits_h")));
     var ul = el("ul");
     (dictGet(["result", "limits"]) || []).forEach(function (s) { ul.appendChild(txt("li", s)); });
-    box.appendChild(ul);
+    techBody.appendChild(ul);
+
+    box.appendChild(tech);
 
     var share = el("p");
     share.appendChild(txt("span", tr("result.share_note") + " ", "small"));

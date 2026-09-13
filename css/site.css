@@ -33,3 +33,13 @@ input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-vis
 .city-status{font-size:.8rem;color:#555;min-height:1em}
 fieldset{margin:.6rem 0;padding:.3rem .6rem}
 @media (max-width:480px){#city-list{max-height:220px}}
+/* EXECUTION_004 addendum: human reading layer */
+.human-reading{border:1px solid #2c5a8f33;background:#f5f8fc;padding:.6rem .9rem;margin:1rem 0}
+.human-reading h2{margin-top:.4rem}
+.hr-block{margin:.7rem 0;padding:.3rem 0;border-top:1px dashed #2c5a8f22}
+.hr-block:first-of-type{border-top:0}
+.hr-block h3{margin:.35rem 0;font-size:1.02rem}
+.hr-block p{margin:.3rem 0}
+details.tech{border:1px solid #ccc;background:#fafafa;padding:.4rem .7rem;margin:1rem 0}
+details.tech summary{cursor:pointer;font-weight:bold}
+details.tech[open]{padding-bottom:.8rem}
