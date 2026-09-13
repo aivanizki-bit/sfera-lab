@@ -172,8 +172,7 @@
       l1f.push("Меркурий в " + merc.sign);
     }
     if (ascE) {
-      var maskText = String(KB.asc[chart.angles.asc.sign].mask).split(": ").slice(1).join(": ");
-      l1.push("Со стороны вас при этом чаще читают как человека " + maskText + ".");
+      l1.push("Снаружи первое впечатление о вас — " + KB.asc[chart.angles.asc.sign].n + ".");
       l1f.push("Асцендент в " + signRu(chart.angles.asc.sign));
       if (!moonSup && moonE !== ascE) {
         var mmL1 = mismatchOnce(moonE, ascE);
@@ -260,8 +259,7 @@
 
     // Как вы выглядите для других
     if (ascE) l2sec(TT("titles.s_seen"), function (p, _b, factors) {
-      var maskText = String(KB.asc[chart.angles.asc.sign].mask).split(": ").slice(1).join(": ");
-      p(cap(maskText) + ".", "Асцендент в " + signRu(chart.angles.asc.sign));
+      p("Первое впечатление о вас — " + KB.asc[chart.angles.asc.sign].n + ".", "Асцендент в " + signRu(chart.angles.asc.sign));
       p(KB.asc[chart.angles.asc.sign].inside_note, "Асцендент — что не видно");
       if (!moonSup && moonE !== ascE) {
         var mm = mismatchOnce(moonE, ascE);
@@ -330,7 +328,7 @@
         var dbody = dynForAspect(a.a, a.b, a.type);
         if (dbody && !dbody._used) { p(dbody.body + " Это не приговор — просто ваша точка роста: она же даёт вам энергию, когда вы с ней справляетесь."); dbody.factors.forEach(function (f) { factors.push(f); }); taken++; }
       });
-      if (!taken) p("В давящей ситуации вашим узлом становится вот это: " + KB.mars[mars.sign].anger + " Зная это про себя, вы успеваете выбрать реакцию, а не получить её автоматически.", "Марс в " + signRu(mars.sign) + " — гнев под давлением");
+      if (!taken) p("В давящей ситуации первым включается вот это: " + KB.mars[mars.sign].anger + " Зная это про себя, вы успеваете выбрать реакцию, а не получить её автоматически.", "Марс в " + signRu(mars.sign) + " — гнев под давлением");
     });
 
     // Внутренние противоречия
@@ -373,10 +371,13 @@
         var body = KB.dynamics[sp.id];
         if (body && usedSpecial < 3) { p(dot(body)); sp.factors.forEach(function (f) { factors.push(f); }); usedSpecial++; }
       });
-      var tight = chart.aspects.slice().sort(function (a, b) { return a.orb - b.orb; })[0];
-      if (tight && tight.orb <= 1.5 && usedSpecial < 3) {
+      var specialSet = PERSONAL.concat(["asc", "saturn", "uranus", "neptune", "pluto"]);
+      var tight = chart.aspects.filter(function (x) {
+        return specialSet.indexOf(x.a) !== -1 && specialSet.indexOf(x.b) !== -1 && x.a !== x.b;
+      }).sort(function (a, b) { return a.orb - b.orb; })[0];
+      if (tight && tight.orb <= 1.0 && usedSpecial < 3) {
         var dbody = dynForAspect(tight.a, tight.b, tight.type);
-        if (dbody && !dbody._used) { p("Самая плотная связь в вашей карте выглядит так: " + dbody.body); dbody.factors.forEach(function (f) { factors.push(f); }); }
+        if (dbody) { p("Одна из самых плотных связей вашей карты звучит так: " + dbody.body, ""); dbody.factors.forEach(function (f) { factors.push(f); }); usedSpecial++; }
       }
       if (!usedSpecial) p("Особенно редких переплетений в этой карте немного — самый важный текст уже прочитан выше. Это честный результат, а не пропущенный раздел.", "");
     });
