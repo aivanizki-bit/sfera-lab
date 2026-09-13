@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://geocoding-api.open-meteo.com; form-action 'none'; base-uri 'none'">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SFERA Lab — Live Research Status</title>
+<meta name="description" content="Real-time counts derived from the SFERA Lab repository: evidence records, claim ledger, benchmark corpus, experiment states, scientific-source integrity.">
+<link rel="canonical" href="https://aivanizki-bit.github.io/sfera-lab/en/en/lab-status.html">
+<link rel="alternate" hreflang="ru" href="https://aivanizki-bit.github.io/sfera-lab/en/lab-status.html">
+<link rel="alternate" hreflang="en" href="https://aivanizki-bit.github.io/sfera-lab/en/en/lab-status.html">
+<meta property="og:title" content="SFERA Lab — Live Research Status">
+<meta property="og:description" content="Real-time counts derived from the SFERA Lab repository: evidence records, claim ledger, benchmark corpus, experiment states, scientific-source integrity.">
+<meta property="og:url" content="https://aivanizki-bit.github.io/sfera-lab/en/en/lab-status.html">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../css/site.css">
+</head>
+<body>
+<nav><a href="index.html">Generator</a>  <a href="about.html">Methodology</a>  <a href="lab-status.html">Research status</a>  <a href="research/x01z.html">X-01-Z note</a>  <a href="privacy.html">Privacy</a></nav>
+<div class="lang-switch small"><a href="https://aivanizki-bit.github.io/sfera-lab/en/lab-status.html">RU</a> · <a href="https://aivanizki-bit.github.io/sfera-lab/en/en/lab-status.html" class="cur">EN</a></div>
+
+<h1>Live research status</h1>
+<p>Every number on this page is derived at build time from the repository's real objects (evidence DB, claim ledger, corpus, run ledger, source-status registry, experiment files). If the repository changes, a rebuild changes this page. There are no vanity counters — a counter that cannot be derived is not shown.</p>
+<p class="small">Generated: 2026-09-13T07:05:37Z</p>
+
+<h2>Evidence database</h2>
+<table><tr><td>records</td><td>111</td></tr><tr><td>HIGH-QUALITY SECONDARY</td><td>32</td></tr><tr><td>INDUSTRY / PRESS</td><td>28</td></tr><tr><td>INFERENCE</td><td>1</td></tr><tr><td>PRIMARY</td><td>29</td></tr><tr><td>UNKNOWN</td><td>13</td></tr><tr><td>USER-SENTIMENT</td><td>8</td></tr><tr><td>contradiction / needs-check groups</td><td>21</td></tr></table>
+<h2>By claim kind</h2>
+<table><tr><td>HISTORICAL SOURCE</td><td>4</td></tr><tr><td>OBSERVED PATTERN</td><td>69</td></tr><tr><td>SCIENTIFIC EVIDENCE</td><td>12</td></tr><tr><td>TRADITIONAL DOCTRINE</td><td>6</td></tr><tr><td>UNKNOWN / INCONCLUSIVE</td><td>20</td></tr></table>
+<p class="small">"SCIENTIFIC EVIDENCE" is the evidence-database class, not a claim that astrology is scientifically supported: the class includes null results (e.g. Carlson 1985; Dean &amp; Kelly 2003), retracted sources (Brooks 2016 — recorded as retracted, excluded from active support), and psychology studies unrelated to astrology's validity. Composition: see the evidence DB.</p>
+
+<h2>Claim ledger (latest version per claim)</h2>
+<table><tr><td>claims</td><td>23</td></tr><tr><td>contested</td><td>1</td></tr><tr><td>experimental</td><td>5</td></tr><tr><td>inconclusive</td><td>1</td></tr><tr><td>prohibited_for_public_use</td><td>3</td></tr><tr><td>supported</td><td>13</td></tr></table>
+<p class="small">Claims marked <code>prohibited_for_public_use</code> (3) are permanently banned from public copy; the build-time claim audit fails the release if their phrasing appears anywhere on this site.</p>
+
+<h2>Benchmark corpus &amp; interpretation runs</h2>
+<table><tr><td>benchmark cases (frozen expectations)</td><td>20</td></tr><tr><td>ledger entries</td><td>135</td></tr><tr><td>all</td><td>2</td></tr><tr><td>competitor_style</td><td>17</td></tr><tr><td>constrained</td><td>39</td></tr><tr><td>raw</td><td>39</td></tr><tr><td>static</td><td>34</td></tr><tr><td>tarot</td><td>4</td></tr></table>
+
+<h2>Experiments &amp; gates</h2>
+<table><tr><th>ID</th><th>Name</th><th>State</th><th>Backing object</th></tr><tr><td>X-00</td><td>Engine audit memo</td><td><b>COMPLETED</b></td><td class='small'>experiments/X-00_engine_audit_memo_v1.md</td></tr><tr><td>X-22</td><td>Evidence-source live verifications (incl. Brooks 2016 retraction)</td><td><b>COMPLETED</b></td><td class='small'>experiments/X-22_needscheck.md</td></tr><tr><td>X-21</td><td>Mercury preregistration draft</td><td><b>WAITING</b></td><td class='small'>experiments/X-21_mercury_prereg_draft.md</td></tr><tr><td>X-01-Z</td><td>Zero-budget AI interpretation quality benchmark</td><td><b>COMPLETED</b></td><td class='small'>experiments/X-01-Z_report_v1.md</td></tr><tr><td>X-02-Z</td><td>Engine bet (return cohorts)</td><td><b>WAITING</b></td><td class='small'>SFERA_VALIDATION_EXECUTION_000.md (re-registered decision rule, signed off 2026-09-12)</td></tr><tr><td>X-03-Z</td><td>Willingness-to-pay surface</td><td><b>NOT_IMPLEMENTED</b></td><td class='small'>no payment code exists in the repository</td></tr><tr><td>human-gate</td><td>Human practitioner acceptance bar</td><td><b>WAITING FOR HUMAN REVIEW</b></td><td class='small'>voluntary practitioner network not yet materialized</td></tr></table>
+
+<h2>Scientific-source integrity</h2>
+<table><tr><td>registered sources</td><td>3</td></tr><tr><td>active</td><td>1</td></tr><tr><td>retracted</td><td>1</td></tr><tr><td>unknown_status</td><td>1</td></tr></table>
+<table><tr><th>source (retracted) — recorded, excluded from active support, not deleted</th></tr><tr><td>Brooks et al. (2016), &#x27;Don&#x27;t stop believing: Rituals improve performance by decreasing anxiety&#x27;, OBHDP 137:71-85 (since 2024-11, verified 2026-09-12); RITUAL EVIDENCE BASE SHOCK (R2): one of the ritual-psychology anchors is dead. Norton &amp; Gino 2014 and Vohs 2013 stand; anything citing Brooks 2016 must be re-anchored. X-02-Z analogical support is weaker than Plan 001 assumed.</td></tr></table><table><tr><th>source (unknown_status) — recorded, excluded from active support, not deleted</th></tr><tr><td>Cajochen et al. (2021), full-moon sleep effect (Science Advances) — citation under review — verification pending; Handled by the Part 9 rule: unknown_status sources are excluded from &#x27;active scientific support&#x27; counts until verified.</td></tr></table>
+<p class="small">only &#x27;active&#x27; (or corrected) sources count as usable scientific support; retracted sources are recorded, never cited as support, never deleted Only 'active' (or corrected) sources count as usable scientific support; retracted sources are recorded, never cited as support, never deleted.</p>
+
+<h2>Telemetry funnel (§2.B)</h2>
+<table><tr><td>traffic_in</td><td>not centrally measured (no sink connected; see privacy page)</td></tr><tr><td>birth_start</td><td>NOT MEASURED (no sink connected)</td></tr><tr><td>calc_complete</td><td>NOT MEASURED (no sink connected)</td></tr><tr><td>reading_consumed</td><td>NOT MEASURED (no sink connected)</td></tr><tr><td>offer_viewed</td><td>NOT_IMPLEMENTED</td></tr><tr><td>checkout_started</td><td>NOT_IMPLEMENTED</td></tr><tr><td>paid</td><td>NOT_IMPLEMENTED</td></tr></table>
+<p class="small">Later funnel stages (offer/checkout/paid) do not exist; none may be simulated. This page reports them as NOT_IMPLEMENTED rather than as zero-conversion steps of a paywall that isn't there.</p>
+
+<h2>Public validation (real humans)</h2>
+<p>Not measured: the central telemetry sink is not connected. 'Not measured' is never rendered as zero.</p>
+
+<h2>Verification records</h2>
+<table><tr><td>JS port record</td><td>results_differential_js_2026-09-13.json</td></tr><tr><td>Python kernel record</td><td>results_differential_2026-09-12.json</td></tr></table>
+<p class="small">ALL JS-PORT CASES WITHIN TOLERANCE vs the frozen Python kernel fixture — agreement is NOT proof of truth (lineage caveat: positions share the astronomy-engine lineage; houses/nodes verified against pyswisseph via the kernel).</p>
+<footer>
+<hr>
+<p class="small">SFERA Lab — research prototype, not a product · engine sfera-western-js 0.1.0-js.1 (browser port of sfera-western 0.1.0) · no accounts, no tracking, no calculation server · <a href="../about.html">Methodology</a> · <a href="../privacy.html">Privacy</a> · <a href="../lab-status.html">Research status</a> · 18+ only</p>
+<p class="small">Place search: Open-Meteo Geocoding API / GeoNames (CC-BY 4.0) · Language: RU · EN</p>
+</footer>
+<script src="../js/astronomy.browser.min.js" integrity="sha384-LTVHvxfbG3XHla4Lu0C0s9U18B2sBOuzJIeOoVHm2t05SOOORvMbBMEVjXrGau9g" crossorigin="anonymous"></script>
+<script src="../js/sfera_engine.js" integrity="sha384-KIATxuj5k4JMF1giAWqOHjr19UPkKPYPuQefKx5R+RgIFrTwOxZ0afq+CdrvsyRZ" crossorigin="anonymous"></script>
+<script src="../js/telemetry_config.js" integrity="sha384-8AUZLrIeW+tw/q3HrUzURcpvlZ0y8GVWcr1Aydgn6uV/kzaFj8cknkIzP+9DHNjK" crossorigin="anonymous"></script>
+<script src="../js/telemetry.js" integrity="sha384-qW6rULOwZb9Oovc/G5zGEr61e6KEIpqg/rwlzz7NIszXgZRzhgd/mNXXdwQpDaYe" crossorigin="anonymous"></script>
+<script src="../js/places.js" integrity="sha384-3KgLRaPi6l9V/U+NkfMp/S4it8Ztc9Ofg+qC6jDUJ61itUsMcRC3i0x1OAZfkivr" crossorigin="anonymous"></script>
+<script src="../js/app.js" integrity="sha384-+gE+hOZxHljnUIhVd5SWOU+XdwQvoz/fMElK0yXfqt0FO1I0JDgElgq1xdYeouZx" crossorigin="anonymous"></script>
+</body>
+</html>

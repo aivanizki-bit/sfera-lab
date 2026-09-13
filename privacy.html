@@ -1,14 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://geocoding-api.open-meteo.com; form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SFERA Lab — Privacy (research prototype)</title>
-<meta name="description" content="What the SFERA Lab generator does and does not do with birth data: browser-only calculation, no server, no central telemetry, honest infrastructure disclosure.">
+<title>SFERA Lab — приватность (исследовательский прототип)</title>
+<meta name="description" content="Что генератор SFERA Lab делает и чего не делает с данными рождения: расчёт только в браузере, честное описание поиска мест и телеметрии по согласию.">
 <link rel="canonical" href="https://aivanizki-bit.github.io/sfera-lab/privacy.html">
-<meta property="og:title" content="SFERA Lab — Privacy (research prototype)">
-<meta property="og:description" content="What the SFERA Lab generator does and does not do with birth data: browser-only calculation, no server, no central telemetry, honest infrastructure disclosure.">
+<link rel="alternate" hreflang="ru" href="https://aivanizki-bit.github.io/sfera-lab/privacy.html">
+<link rel="alternate" hreflang="en" href="https://aivanizki-bit.github.io/sfera-lab/en/privacy.html">
+<meta property="og:title" content="SFERA Lab — приватность (исследовательский прототип)">
+<meta property="og:description" content="Что генератор SFERA Lab делает и чего не делает с данными рождения: расчёт только в браузере, честное описание поиска мест и телеметрии по согласию.">
 <meta property="og:url" content="https://aivanizki-bit.github.io/sfera-lab/privacy.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
@@ -16,32 +18,39 @@
 <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-<nav><a href="index.html">Generator</a>  <a href="about.html">Methodology</a>  <a href="lab-status.html">Research status</a>  <a href="research/x01z.html">X-01-Z note</a>  <a href="privacy.html">Privacy</a></nav>
-<h1> SFERA Lab — privacy explanation (research prototype)</h1>
-<p><em>This is the plain-language privacy explanation for the public SFERA Lab generator ( EXECUTION_003 Part 3 ). It deliberately is not a lawyer-style privacy policy, and it does not claim GDPR compliance. It describes what the system actually does.</em></p>
-<h2> What input is used</h2>
-<p>The natal chart form asks for a birth date, an optional birth time, a place (city lookup from a small bundled list, or latitude/longitude), a time zone, an optional house system, and an optional free-text question.</p>
-<p><strong>The calculation runs entirely inside your browser.</strong> Your birth data is processed by JavaScript on your device and is never transmitted to us or to anyone else. There is no server that could receive it.</p>
-<h2> Whether input is retained</h2>
-<ul><li>Birth data: <strong>not retained anywhere by us</strong> — not on a server (there is none), not in storage. It exists only in the memory of your browser tab until you close or reload the page.</li><li>We cannot recover, reproduce, or look at your chart after you leave the page. Nothing is linked to you, because nothing about you reaches us.</li></ul>
-<h2> What telemetry is collected</h2>
-<ul><li>The <strong>current public surface has no central telemetry</strong>. There is no analytics service, no logging endpoint, and no server. The page's visit counter, funnel measurement, and source-tag (<code>?src=</code>) machinery are implemented client-side and are discarded when you close the page, unless and until a research storage backend is ever added — in which case this page will be updated first, and only consent-gated events would flow there.</li><li>Your <strong>consent choice</strong> (if you make one) is stored in your own browser (<code>localStorage</code>), so the form can remember your answer. You can clear it any time via your browser settings ("site data" for this site).</li><li>Infrastructure note (honesty): the site is served as static files by GitHub Pages (GitHub/Microsoft). Like any web host, GitHub records request logs (e.g., IP address, user agent) under its own privacy policy for security and abuse prevention. That logging is outside this project's control, and this project never receives it.</li></ul>
-<h2> What consent changes</h2>
-<p>The consent checkbox on the form allows anonymous usage measurement of this research prototype (which stage of the form/calculation/reading flow was reached, and the coarse source tag of the link you followed). Consent <strong>never</strong> enables anyone to see your birth data or your question — by construction, they never leave your device. If a research storage backend is added later, only consented, non-identifying events would ever be stored there.</p>
-<h2> Telemetry never feeds interpretation</h2>
-<p>No measurement, telemetry, or history of any kind is ever used as input to any calculation or reading. This is a standing rule of the SFERA Lab, in force in every component built so far.</p>
-<h2> This is an experimental Lab surface</h2>
-<p>This is a research instrument, not a commercial product, and not a finished service. It may change, break, or be taken offline without notice. It is not the final SFERA product.</p>
-<h2> How to stop participating</h2>
-<p>Just stop using the page — there is nothing stored about you to delete. To also remove the consent marker from your own browser, clear this site's data in your browser settings. We hold no data we could delete on request, because we receive none.</p>
-<h2> Scope</h2>
-<p>18+ only. If you submit someone else's birth data, that is your responsibility — we never receive or store it anyway.</p>
+<nav><a href="index.html">Генератор</a>  <a href="about.html">Методология</a>  <a href="lab-status.html">Статус исследований</a>  <a href="research/x01z.html">Заметка X-01-Z</a>  <a href="privacy.html">Приватность</a></nav>
+<div class="lang-switch small"><a href="https://aivanizki-bit.github.io/sfera-lab/privacy.html" class="cur">RU</a> · <a href="https://aivanizki-bit.github.io/sfera-lab/en/privacy.html">EN</a></div>
+<h1> SFERA Lab — объяснение приватности (исследовательский прототип)</h1>
+<p><em>Это объяснение приватности простым языком для публичного генератора SFERA Lab (EXECUTION_003 ч. 3; обновлено в EXECUTION_004: глобальный поиск мест рождения и опциональный центральный приёмник анонимной телеметрии). Это сознательно не юристоподобная политика конфиденциальности, и оно не заявляет соответствия GDPR. Здесь описано то, что система делает на самом деле.</em></p>
+<h2> Какие данные ввода используются</h2>
+<p>Форма натальной карты спрашивает дату рождения, необязательное время рождения, место (поиск города по глобальному каталогу, либо широта/долгота вручную), часовой пояс, необязательную систему домов и необязательный свободный текст вопроса.</p>
+<p><strong>Расчёт полностью выполняется внутри вашего браузера.</strong> Данные рождения обрабатываются JavaScript на вашем устройстве и никогда не отправляются нам или кому-либо ещё. Не существует сервера, который мог бы их получить.</p>
+<h2> Поиск места рождения: что уходит в сеть</h2>
+<p>Если вы пользуетесь поиском города, <strong>набранный текст названия</strong> отправляется запросом к сервису Open-Meteo Geocoding API (данные открытого каталога GeoNames, лицензия CC-BY 4.0), чтобы получить координаты и часовой пояс (имя IANA). При этом:</p>
+<ul><li><strong>не отправляются</strong> дата рождения, время рождения, вопрос, любые данные карты, любые идентификаторы телеметрии;</li><li>запрос не содержит cookie-аккаунта (его не существует) и делается без учётных данных;</li><li>можно вообще избежать этого запроса: встроенный короткий список городов работает без сети, а координаты и часовой пояс всегда можно ввести вручную.</li></ul>
+<p>Если вместо поиска вы сразу вводите широту/долготу вручную, ни один запрос о месте никуда не отправляется.</p>
+<h2> Сохраняется ли ввод</h2>
+<ul><li>Данные рождения: <strong>не сохраняются нигде нами</strong> — ни на сервере (его нет), ни в хранилище. Они существуют только в памяти вкладки браузера, пока вы не закроете или не перезагрузите страницу.</li><li>Мы не можем восстановить, воспроизвести или увидеть вашу карту после того, как вы ушли со страницы. Ничто не связано с вами, потому что ничто о вас до нас не доходит.</li></ul>
+<h2> Какая телеметрия собирается</h2>
+<ul><li><strong>Без вашего согласия не отправляется ничего — включая сам факт визита.</strong> Нет аналитического сервиса, получающего данные без явного согласия.</li><li><strong>Согласие</strong> (галочка в форме) разрешает анонимное измерение использования этого исследовательского прототипа. Согласованные события отправляются на минимальный исследовательский приёмник (Cloudflare Worker), развёрнутый только по отдельному решению основателя проекта. Что входит в событие: имя этапа (например <code>traffic_in</code>, <code>birth_start</code>, <code>calc_complete</code>, <code>reading_consumed</code>), время, случайный идентификатор сессии (живёт до закрытия вкладки), класс трафика (человек/бот, без хранения строки User-Agent), язык интерфейса, класс устройства (мобильное/ настольное), тег источника ссылки (например <code>personal</code>, <code>telegram</code>) и служебные флаги расчёта. После прочтения результата дополнительно: факт «результат был прочитан» (определяется поведенчески: прокрутка текста чтения либо 20 секунд видимого экрана — отрисовка сама по себе не считается), необязательные анонимные ответы на 5 коротких вопросов об опыте (хранятся отдельно от воронки), действие «поделиться инструментом» (только по вашему явному нажатию).</li><li><strong>Постоянный идентификатор посетителя</strong> создаётся только после согласия и нужен лишь для одного: отличить возврат (новый визит) от первого визита (<code>return_visit</code>). Он случайный, не связан с данными рождения, не используется рекламой и не объединяется с другими сервисами. <strong>Как удалить:</strong> снимите галочку согласия — идентификатор стирается из вашего браузера; либо очистите данные сайта в настройках браузера.</li><li>Приёмник настроен так, чтобы <strong>не сохранять IP-адреса</strong>: сервер видит IP запроса (как любой веб-сервер), но не записывает его; сохраняется только страна запроса (код страны от сети Cloudflare). Содержимое событий жёстко проверяется схемой; поля с данными рождения отбрасываются.</li><li><strong>Никакая телеметрия никогда не используется как вход интерпретации.</strong> Это постоянное правило SFERA Lab, действующее в каждом компоненте.</li><li><strong>Выб согласия</strong> (галочка в форме) сохраняется в вашем собственном браузере (<code>localStorage</code>), чтобы форма помнила ваш ответ. Очистить можно в любой момент через настройки браузера («данные сайтов» для этого сайта).</li><li>Инфраструктурная честность: сайт раздаётся статикой через GitHub Pages (GitHub/Microsoft); приёмник телеметрии (если подключён) работает на Cloudflare Workers. Как любые хостинги, они фиксируют собственные журналы запросов (например IP, User-Agent) по собственным политикам для безопасности и защиты от злоупотреблений — эта журнализация вне контроля проекта и проекту не передаётся.</li></ul>
+<h2> Что меняет согласие</h2>
+<p>Согласие никогда не открывает никому доступ к вашим данным рождения или вопросу — по построению они не покидают ваше устройство. Оно разрешает только анонимный подсчёт этапов использования, перечисленный выше.</p>
+<h2> Это экспериментальная поверхность Лаборатории</h2>
+<p>Это исследовательский инструмент, не коммерческий продукт и не готовый сервис. Он может меняться, ломаться или отключаться без уведомления. Это не финальный продукт SFERA.</p>
+<h2> Как прекратить участие</h2>
+<p>Просто перестаньте открывать страницу — удалять нечего. Чтобы стереть маркер согласия и идентификатор из собственного браузера — снимите галочку на странице или очистите данные сайта в настройках браузера. У нас нет данных, которые мы могли бы удалить по запросу, потому что без согласия мы не получаем ничего.</p>
+<h2> Границы</h2>
+<p>Только 18+. Если вы вводите данные рождения другого человека — это ваша ответственность; мы их всё равно не получаем и не храним.</p>
 <footer>
 <hr>
-<p class="small">SFERA Lab — research prototype, not a product · engine sfera-western-js 0.1.0-js.1
-(browser port of sfera-western 0.1.0) · no accounts, no tracking, no server ·
-<a href="about.html">methodology &amp; provenance</a> · <a href="privacy.html">privacy</a> ·
-<a href="lab-status.html">research status</a> · 18+ only</p>
+<p class="small">SFERA Lab — исследовательский прототип, не продукт · движок sfera-western-js 0.1.0-js.1 (браузерный порт sfera-western 0.1.0) · без аккаунтов, без слежки, без сервера расчёта · <a href="about.html">Методология</a> · <a href="privacy.html">Приватность</a> · <a href="lab-status.html">Статус исследований</a> · только 18+</p>
+<p class="small">Поиск мест: Open-Meteo Geocoding API / GeoNames (CC-BY 4.0) · Язык: RU · EN</p>
 </footer>
+<script src="js/astronomy.browser.min.js" integrity="sha384-LTVHvxfbG3XHla4Lu0C0s9U18B2sBOuzJIeOoVHm2t05SOOORvMbBMEVjXrGau9g" crossorigin="anonymous"></script>
+<script src="js/sfera_engine.js" integrity="sha384-KIATxuj5k4JMF1giAWqOHjr19UPkKPYPuQefKx5R+RgIFrTwOxZ0afq+CdrvsyRZ" crossorigin="anonymous"></script>
+<script src="js/telemetry_config.js" integrity="sha384-8AUZLrIeW+tw/q3HrUzURcpvlZ0y8GVWcr1Aydgn6uV/kzaFj8cknkIzP+9DHNjK" crossorigin="anonymous"></script>
+<script src="js/telemetry.js" integrity="sha384-qW6rULOwZb9Oovc/G5zGEr61e6KEIpqg/rwlzz7NIszXgZRzhgd/mNXXdwQpDaYe" crossorigin="anonymous"></script>
+<script src="js/places.js" integrity="sha384-3KgLRaPi6l9V/U+NkfMp/S4it8Ztc9Ofg+qC6jDUJ61itUsMcRC3i0x1OAZfkivr" crossorigin="anonymous"></script>
+<script src="js/app.js" integrity="sha384-+gE+hOZxHljnUIhVd5SWOU+XdwQvoz/fMElK0yXfqt0FO1I0JDgElgq1xdYeouZx" crossorigin="anonymous"></script>
 </body>
 </html>

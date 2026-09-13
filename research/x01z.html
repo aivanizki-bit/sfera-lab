@@ -1,44 +1,51 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://geocoding-api.open-meteo.com; form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SFERA Lab — X-01-Z benchmark in plain language (including failures)</title>
-<meta name="description" content="What our first AI-interpretation quality benchmark found — including the negative results: wrong-chart contamination, house errors, and the useful-but-unfaithful raw-AI trade-off.">
+<title>SFERA Lab — бенчмарк X-01-Z простыми словами (включая провалы)</title>
+<meta name="description" content="Что показал наш первый бенчмарк качества ИИ-интерпретаций — включая отрицательные результаты: загрязнение чужой картой, ошибки домов и размен достоверности на полезность у сырого ИИ.">
 <link rel="canonical" href="https://aivanizki-bit.github.io/sfera-lab/research/x01z.html">
-<meta property="og:title" content="SFERA Lab — X-01-Z benchmark in plain language (including failures)">
-<meta property="og:description" content="What our first AI-interpretation quality benchmark found — including the negative results: wrong-chart contamination, house errors, and the useful-but-unfaithful raw-AI trade-off.">
+<link rel="alternate" hreflang="ru" href="https://aivanizki-bit.github.io/sfera-lab/research/x01z.html">
+<link rel="alternate" hreflang="en" href="https://aivanizki-bit.github.io/sfera-lab/en/research/x01z.html">
+<meta property="og:title" content="SFERA Lab — бенчмарк X-01-Z простыми словами (включая провалы)">
+<meta property="og:description" content="Что показал наш первый бенчмарк качества ИИ-интерпретаций — включая отрицательные результаты: загрязнение чужой картой, ошибки домов и размен достоверности на полезность у сырого ИИ.">
 <meta property="og:url" content="https://aivanizki-bit.github.io/sfera-lab/research/x01z.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
-<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="../css/site.css">
 </head>
 <body>
-<nav><a href="index.html">Generator</a>  <a href="about.html">Methodology</a>  <a href="lab-status.html">Research status</a>  <a href="research/x01z.html">X-01-Z note</a>  <a href="privacy.html">Privacy</a></nav>
-<h1> X-01-Z, in plain language — what our first AI-quality benchmark found</h1>
-<p><em>Public research note (EXECUTION_003 Part 7), based on the committed internal report <code>experiments/X-01-Z_report_v1.md</code> (2026-09-12). The full report with all numbers is in the Lab repository. This page deliberately includes the failures.</em></p>
-<h2> What we tested</h2>
-<p>SFERA is building toward AI-assisted astrology interpretation, so before letting an AI write a single public word, we measured whether a <strong>constrained</strong> AI — one forced to stay inside a labeled knowledge base and to attach every statement to the calculated chart — is more <strong>faithfully grounded</strong> than an unconstrained ("raw") AI writing freely from what it picked up in training.</p>
-<p>Four kinds of text were generated over 17 benchmark chart cases: our deterministic template, a deliberate imitation of generic mass-market horoscope style, the constrained AI, and the raw AI. Two different AI model families generated the AI texts (44 runs, zero cost), and two further independent model families audited them sentence-by-sentence against chart ground truth.</p>
-<h2> What we found</h2>
-<p><strong>The constrained architecture produced zero unsupported doctrinal claims in the audited subset — but the zero-position-hallucination target FAILED.</strong> The guarded layer stayed inside its labeled knowledge base (zero unsupported-interpretation defects, zero overclaims there) while still making positional errors, which we record as a negative result:</p>
-<ul><li>one GLM run interpreted the <em>wrong chart</em> (batch-generation contamination: it read a different benchmark case's data and produced 10 of the arm's 11 position errors);</li><li>the Qwen arm repeatedly mis-attributed planets to houses (off by one, or a wrong cusp labeled as an 8th-house cusp).</li></ul>
-<p><strong>Raw AI sounded better and was less faithful.</strong> The unconstrained texts were richer, more specific, and rated more <em>useful</em> — while carrying far more defects: calculation errors in nearly every run, freely invented biography ("you may have felt your ideas were dismissed"), and overclaims. "Helpful-sounding" and "faithful to the chart" are measurably different axes, and raw generation trades the second for the first.</p>
-<p><strong>The generic mass-market imitation was the worst on usefulness and safety.</strong> It states no real positions, generalizes flattery, and — unlike the other arms — ignored a fatalistic question that deserves care.</p>
-<p><strong>Even our AI judges disagreed with each other</strong> (mean difference ≈ 0.64 rubric points per dimension, max 3). We keep that disagreement in the record instead of averaging it away. AI consensus is not practitioner validation.</p>
-<p><strong>The audit instrument caught a defect in our own harness</strong> (missing ground truth in a first audit round). We fixed it, re-ran, and kept the degraded first round in the repository. Nothing was silently corrected.</p>
-<h2> What we did NOT prove</h2>
-<ul><li>that astrology works or predicts anything — this benchmark measured text quality against charts, not astrology against reality;</li><li>that practitioners or users accept any of these texts — no human panel has judged them yet;</li><li>the scientific validity of any traditional claim;</li><li>user preference, retention, or willingness to pay.</li></ul>
-<h2> Why we publish the failures</h2>
-<p>The negative results above changed what we build next (one chart per request is now a hard rule; the constrained prompt gets a house-verification pass). Nothing was silently corrected — that is the point.</p>
+<nav><a href="index.html">Генератор</a>  <a href="about.html">Методология</a>  <a href="lab-status.html">Статус исследований</a>  <a href="research/x01z.html">Заметка X-01-Z</a>  <a href="privacy.html">Приватность</a></nav>
+<div class="lang-switch small"><a href="https://aivanizki-bit.github.io/sfera-lab/research/x01z.html" class="cur">RU</a> · <a href="https://aivanizki-bit.github.io/sfera-lab/en/research/x01z.html">EN</a></div>
+<h1> X-01-Z простыми словами — что показал наш первый бенчмарк качества ИИ-интерпретаций</h1>
+<p><em>Публичная исследовательская заметка (EXECUTION_003, часть 7; EXECUTION_004 — русская версия по умолчанию), основана на зафиксированном внутреннем отчёте <code>experiments/X-01-Z_report_v1.md</code> (2026-09-12). Полный отчёт со всеми числами — в репозитории лаборатории. На этой странице сознательно приведены и провалы.</em></p>
+<h2> Что мы проверяли</h2>
+<p>SFERA движется к ИИ-ассистированной астрологической интерпретации, поэтому прежде чем позволить ИИ написать хоть одно публичное слово, мы измерили, является ли <strong>ограниченный</strong> ИИ — принуждённый оставаться внутри размеченной базы знаний и привязывать каждое утверждение к рассчитанной карте — более <strong>достоверно обоснованным</strong>, чем неограниченный («сырой») ИИ, пишущий свободно из того, что он усвоил при обучении.</p>
+<p>Четыре типа текста были сгенерированы на 17 эталонных случаях карт: наш детерминированный шаблон, намеренная имитация безликого массового гороскопа, ограниченный ИИ и сырой ИИ. Тексты ИИ генерировали две разные семьи моделей (44 запуска, нулевая стоимость), а аудировали их предложение за предложением против данных карт ещё две независимые семьи моделей.</p>
+<h2> Что мы нашли</h2>
+<p><strong>Ограниченная архитектура дала ноль неподкреплённых доктринальных утверждений в аудированной выборке — но целевой показатель «ноль позиционных галлюцинаций» НЕ ДОСТИГНУТ.</strong> Защищённый слой остался внутри размеченной базы знаний (ноль дефектов неподкреплённой интерпретации, ноль сверхпритязаний), но при этом допускал позиционные ошибки, что мы фиксируем как отрицательный результат:</p>
+<ul><li>один запуск GLM интерпретировал <em>чужую карту</em> (загрязнение пакетной генерации: он прочитал данные другого эталонного случая и произвёл 10 из 11 позиционных ошибок своего плеча);</li><li>плечо Qwen устойчиво приписывало планеты не тем домам (сдвиг на один, либо чужой куспид, подписанный как куспид VIII дома).</li></ul>
+<p><strong>Сырой ИИ звучал лучше, но был менее достоверным.</strong> Неограниченные тексты были богаче, конкретнее и оценены как более <em>полезные</em> — но несли заметно больше дефектов: ошибки расчёта почти в каждом запуске, свободно выдуманная биография («возможно, вы чувствовали, что ваши идеи отвергали») и сверхпритязания. «Звучит полезно» и «верно карте» — измеримо разные оси, и сырая генерация разменивает вторую на первую.</p>
+<p><strong>Безликая массовая имитация оказалась худшей по полезности и безопасности.</strong> Она не называет реальных положений, обобщает лесть и — в отличие от остальных плеч — проигнорировала фаталистический вопрос, требующий аккуратности.</p>
+<p><strong>Даже наши ИИ-судьи расходились между собой</strong> (средняя разница ≈ 0.64 пункта рубрики на размерность, максимум 3). Мы сохраняем это расхождение в протоколе, а не усредняем его. Консенсус ИИ — не валидация практиками.</p>
+<p><strong>Аудиторский инструмент поймал дефект нашего же стенда</strong> (отсутствующие эталонные данные в первом раунде аудита). Мы исправили, перезапустили и сохранили деградировавший первый раунд в репозитории. Ничего не было исправлено молча.</p>
+<h2> Чего мы НЕ доказали</h2>
+<ul><li>что астрология работает или что-либо предсказывает — этот бенчмарк измерял качество текста относительно карт, а не астрологию относительно реальности;</li><li>что практики или пользователи принимают эти тексты — человеческая панель их пока не оценивала;</li><li>научную валидность каких-либо традиционных утверждений;</li><li>пользовательские предпочтения, удержание или готовность платить.</li></ul>
+<h2> Почему мы публикуем провалы</h2>
+<p>Отрицательные результаты выше изменили то, что мы строим дальше (один запрос — одна карта теперь жёсткое правило; ограниченный промпт получает шаг проверки домов). Ничего не было исправлено молча — в этом и смысл.</p>
 <footer>
 <hr>
-<p class="small">SFERA Lab — research prototype, not a product · engine sfera-western-js 0.1.0-js.1
-(browser port of sfera-western 0.1.0) · no accounts, no tracking, no server ·
-<a href="about.html">methodology &amp; provenance</a> · <a href="privacy.html">privacy</a> ·
-<a href="lab-status.html">research status</a> · 18+ only</p>
+<p class="small">SFERA Lab — исследовательский прототип, не продукт · движок sfera-western-js 0.1.0-js.1 (браузерный порт sfera-western 0.1.0) · без аккаунтов, без слежки, без сервера расчёта · <a href="../about.html">Методология</a> · <a href="../privacy.html">Приватность</a> · <a href="../lab-status.html">Статус исследований</a> · только 18+</p>
+<p class="small">Поиск мест: Open-Meteo Geocoding API / GeoNames (CC-BY 4.0) · Язык: RU · EN</p>
 </footer>
+<script src="../js/astronomy.browser.min.js" integrity="sha384-LTVHvxfbG3XHla4Lu0C0s9U18B2sBOuzJIeOoVHm2t05SOOORvMbBMEVjXrGau9g" crossorigin="anonymous"></script>
+<script src="../js/sfera_engine.js" integrity="sha384-KIATxuj5k4JMF1giAWqOHjr19UPkKPYPuQefKx5R+RgIFrTwOxZ0afq+CdrvsyRZ" crossorigin="anonymous"></script>
+<script src="../js/telemetry_config.js" integrity="sha384-8AUZLrIeW+tw/q3HrUzURcpvlZ0y8GVWcr1Aydgn6uV/kzaFj8cknkIzP+9DHNjK" crossorigin="anonymous"></script>
+<script src="../js/telemetry.js" integrity="sha384-qW6rULOwZb9Oovc/G5zGEr61e6KEIpqg/rwlzz7NIszXgZRzhgd/mNXXdwQpDaYe" crossorigin="anonymous"></script>
+<script src="../js/places.js" integrity="sha384-3KgLRaPi6l9V/U+NkfMp/S4it8Ztc9Ofg+qC6jDUJ61itUsMcRC3i0x1OAZfkivr" crossorigin="anonymous"></script>
+<script src="../js/app.js" integrity="sha384-+gE+hOZxHljnUIhVd5SWOU+XdwQvoz/fMElK0yXfqt0FO1I0JDgElgq1xdYeouZx" crossorigin="anonymous"></script>
 </body>
 </html>

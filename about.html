@@ -1,14 +1,16 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://geocoding-api.open-meteo.com; form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>SFERA Lab — Methodology &amp; Provenance</title>
-<meta name="description" content="Calculation method, conventions, two-layer verification record, school labels and honest limitations of the SFERA Lab natal chart generator.">
+<title>SFERA Lab — методология и происхождение данных</title>
+<meta name="description" content="Метод расчёта, конвенции, двухслойная верификация, школьные метки и честные ограничения генератора натальных карт SFERA Lab.">
 <link rel="canonical" href="https://aivanizki-bit.github.io/sfera-lab/about.html">
-<meta property="og:title" content="SFERA Lab — Methodology &amp; Provenance">
-<meta property="og:description" content="Calculation method, conventions, two-layer verification record, school labels and honest limitations of the SFERA Lab natal chart generator.">
+<link rel="alternate" hreflang="ru" href="https://aivanizki-bit.github.io/sfera-lab/about.html">
+<link rel="alternate" hreflang="en" href="https://aivanizki-bit.github.io/sfera-lab/en/about.html">
+<meta property="og:title" content="SFERA Lab — методология и происхождение данных">
+<meta property="og:description" content="Метод расчёта, конвенции, двухслойная верификация, школьные метки и честные ограничения генератора натальных карт SFERA Lab.">
 <meta property="og:url" content="https://aivanizki-bit.github.io/sfera-lab/about.html">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
@@ -16,82 +18,43 @@
 <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-<nav><a href="index.html">Generator</a>  <a href="about.html">Methodology</a>  <a href="lab-status.html">Research status</a>  <a href="research/x01z.html">X-01-Z note</a>  <a href="privacy.html">Privacy</a></nav>
+<nav><a href="index.html">Генератор</a>  <a href="about.html">Методология</a>  <a href="lab-status.html">Статус исследований</a>  <a href="research/x01z.html">Заметка X-01-Z</a>  <a href="privacy.html">Приватность</a></nav>
+<div class="lang-switch small"><a href="https://aivanizki-bit.github.io/sfera-lab/about.html" class="cur">RU</a> · <a href="https://aivanizki-bit.github.io/sfera-lab/en/about.html">EN</a></div>
 
-<h1>Methodology &amp; provenance</h1>
-<h2>What this is</h2>
-<p>SFERA Lab is a <b>research instrument</b>, not a commercial product. This page computes
-real Western tropical natal charts and displays them with their conventions labeled. It
-generates no AI text. It exists because the SFERA research program needs a verified
-deterministic calculation layer, and because a free, honest chart tool is genuinely
-useful. This is a <b>Research UI</b>, deliberately not a finished product interface.</p>
-<h2>Calculation method</h2>
+<h1>Методология и происхождение данных</h1>
+<h2>Что это такое</h2>
+<p>SFERA Lab — <b>исследовательский инструмент</b>, не коммерческий продукт. Эта страница рассчитывает настоящие западные тропические натальные карты и показывает их с размеченными конвенциями. Она не генерирует ИИ-текстов. Она существует, потому что исследовательской программе SFERA нужен верифицированный детерминированный слой расчёта, и потому что бесплатный, честный инструмент карт действительно полезен. Это <b>исследовательский интерфейс</b>, сознательно не готовый продуктовый.</p>
+<h2>Метод расчёта</h2>
 <table>
-<tr><th>Layer</th><th>Method</th></tr>
-<tr><td>Planetary positions</td><td><b>astronomy-engine 2.1.19</b> (MIT, analytic ephemeris —
-the same library version as the verified Python kernel), geocentric ecliptic-of-date
-longitudes; retrograde states from numeric 1-hour central-difference speeds.</td></tr>
-<tr><td>Time zones</td><td>IANA tzdb via the browser/Node <code>Intl</code> database —
-the authoritative source for historical offsets, DST and LMT-era births. Nonexistent local
-times (DST spring gaps) are rejected, not silently shifted. Ambiguous fall-back times are
-labeled and resolved explicitly (fold 0/1).</td></tr>
-<tr><td>Houses</td><td>Native formulas for <b>ASC/MC and Placidus, equal and whole-sign</b>
-systems, computed in your browser. House systems genuinely disagree away from the angles —
-that is a documented feature of the tradition; the system used is always labeled.
-Koch, Regiomontanus and Campanus are computed by the Python lab kernel but are <b>not</b>
-implemented in this browser build (honestly absent, never approximated).</td></tr>
-<tr><td>Lunar nodes</td><td>Mean node via the analytic secular formula. The true
-(osculating) node requires the lab kernel's library and is <b>suppressed</b> here.</td></tr>
-<tr><td>Aspects</td><td>Major aspects (0/60/90/120/180) with one documented natal orb set
-(config orbs-v0.1); the convention is disclosed rather than hidden.</td></tr>
-<tr><td>Suppression rule</td><td>Unknown birth time → Moon degree, angles and houses are
-suppressed, never approximated. Beyond ±66° latitude angles and houses are suppressed
-(school-dependent to the point of being undefined).</td></tr>
+<tr><th></th><th></th></tr>
+<tr><td>Позиции планет</td><td><b>astronomy-engine 2.1.19</b> (MIT, аналитические эфемериды — та же версия библиотеки, что в верифицированном Python-ядре), геоцентрические долготы эклиптики даты; ретроградность по численной 1-часовой центральной разности скоростей.</td></tr><tr><td>Часовые пояса</td><td>IANA tzdb через базу <code>Intl</code> браузера/Node — авторитетный источник исторических смещений, переходов на летнее время и рождений до введения зон. Несуществующие местные времена (весенний скачок DST) отклоняются, а не сдвигаются молча. Двусмысленные осенние времена помечаются и разрешаются явно (fold 0/1). Имя зоны (например Asia/Yekaterinburg) приходит из результата поиска места, а не выводится из текущего смещения.</td></tr><tr><td>Дома</td><td>Собственные формулы для <b>ASC/MC и систем Плацидуса, равнодомной и целых знаков</b>, считаются в вашем браузере. Системы домов реально расходятся вдали от углов — это документированная черта традиции; используемая система всегда указывается. Кох, Региомонтан и Кампанус считает Python-ядро лаборатории, но в этой браузерной сборке они <b>не</b> реализованы (честное отсутствие, никогда не приближение).</td></tr><tr><td>Лунные узлы</td><td>Средний узел по аналитической вековой формуле. Истинный (оскулирующий) узел требует библиотеки лабораторного ядра и здесь <b>скрыт</b>.</td></tr><tr><td>Аспекты</td><td>Мажорные аспекты (0/60/90/120/180) с одним документированным набором натальных орбов (config orbs-v0.1); конвенция раскрыта, а не спрятана.</td></tr><tr><td>Правило сокрытия</td><td>Неизвестное время рождения → градус Луны, углы и дома скрыты, никогда не приближены. За пределами широт ±66° углы и дома скрыты (школьная зависимость до неопределённости).</td></tr>
 </table>
-<h2>Verification (two layers, both frozen and committed)</h2>
+<h2>Верификация (два слоя, оба зафиксированы и закоммичены)</h2>
 <table>
-<tr><th>Record</th><th>Result</th></tr>
-<tr><td>Python kernel <code>sfera-western 0.1.0</code> vs Swiss Ephemeris (pyswisseph) + published
-oracle anchors (equinoxes/solstices/new moons)</td><td>results_differential_2026-09-12.json —
-51 frozen verification cases, max cross-engine delta
-0.0051°. Engine-vs-engine agreement is NOT proof of truth,
-and is labeled as such.</td></tr>
-<tr><td>This browser port (<code>sfera-western-js 0.1.0-js.1</code>) vs the Python kernel</td>
-<td>results_differential_js_2026-09-12.json — 260 frozen cases (positions, 16 historical time-zone batteries,
-192 house-system cases across 8 latitudes, mean node, full-chart pipelines, byte-level
-reading-template comparison): <b>0 failures</b>.
-Layer maxima: positions 0°
-(same library lineage — not an independent cross-check; the independent cross-engine
-check is the Python kernel's 0.0051° vs Swiss Ephemeris) ·
-time zones 0 s ·
-houses 0.0001° ·
-mean node 0.0048°.
-The committed record and fixture are in the public repository.</td></tr>
+<tr><th></th><th></th></tr>
+<tr><td>Python-ядро <code>sfera-western 0.1.0</code> против Swiss Ephemeris (pyswisseph) + опубликованных оракулов (равноденствия/солнцестояния/новолуния)</td>
+<td>results_differential_2026-09-12.json — 51 замороженный верификационный случай, максимальное междвижковое расхождение 0.0051°. Согласие движков — НЕ доказательство истины, и это помечено.</td></tr>
+<tr><td>Этот браузерный порт (<code>sfera-western-js 0.1.0-js.1</code>) против Python-ядра</td>
+<td>results_differential_js_2026-09-13.json — 260 замороженных случаев (позиции, 16 исторических батарей часовых поясов, 192 случая систем домов на 8 широтах, средний узел, полные конвейеры карты, побайтовое сравнение шаблона чтения): <b>0 сбоев</b>. Максимумы слоёв: позиции 0° (та же родословная библиотеки — не независимая перекрёстная проверка; независимая проверка — 0.0051° Python-ядра против Swiss Ephemeris) · часовые пояса 0 с · дома 0.0001° · средний узел 0.0048°. Закоммиченный протокол и фикстура — в публичном репозитории.</td></tr>
 </table>
-<h2>School &amp; convention labels</h2>
-<p>Western tropical astrology is not one thing. Where a convention matters (house system,
-orb set, node type), this tool shows which one was used. The only interpretive surface is
-the labeled static template, which lists calculated positions and deliberately suppresses
-what is unknown — it makes no claims beyond the chart's geometry.</p>
-<h2>Research status (honest)</h2>
-<p>The lab has run an internal quality benchmark of AI interpretation (X-01-Z) and
-maintains an evidence database and claim ledger — see the
-<a href="lab-status.html">live research status page</a>, generated from the repository.
-What is <b>not</b> validated: human practitioner acceptance, the engine bet on voluntary
-return, willingness to pay. No research claims are made beyond what exists.</p>
-<h2>Privacy</h2>
-<p>The calculation runs in your browser; birth data never leaves your device; there is no
-server to receive it. Full explanation: <a href="privacy.html">privacy page</a>.</p>
-<h2>City list disclosure</h2>
-<p>The city search uses a static bundled list of 161 cities compiled by the research
-agent (coordinates ≈±1 km, verified class: UNVERIFIED_COMPILED_LIST). For archival
-precision, enter exact latitude/longitude and the IANA time zone manually.</p>
+<h2>Школьные метки и конвенции</h2>
+<p>Западная тропическая астрология — не одна вещь. Там, где конвенция важна (система домов, набор орбов, тип узла), инструмент показывает, какая использована. Единственная интерпретационная поверхность — размеченный статический шаблон: он перечисляет рассчитанные положения и сознательно скрывает неизвестное — никаких утверждений сверх геометрии карты.</p>
+<h2>Статус исследований (честный)</h2>
+<p>Лаборатория провела внутренний бенчмарк качества ИИ-интерпретаций (X-01-Z) и ведёт базу свидетельств и реестр утверждений — см. <a href="lab-status.html">живую страницу статуса</a>, генерируемую из репозитория. Что <b>не</b> валидировано: принятие людьми-практиками, ставка движка на добровольный возврат, готовность платить. Никаких исследовательских утверждений сверх существующего не делается.</p>
+<h2>Приватность</h2>
+<p>Расчёт идёт в вашем браузере; данные рождения не покидают устройство; сервера для их приёма не существует. Полное объяснение: <a href="privacy.html">страница приватности</a> — включая честное описание того, что отправляет поиск места рождения.</p>
+<h2>Раскрываемость поиска мест</h2>
+<p>Поиск места использует гибрид: встроенный короткий список городов (координаты ≈±1 км, класс верификации UNVERIFIED_COMPILED_LIST) плюс глобальный каталог Open-Meteo/GeoNames (CC-BY 4.0; запрос отправляется только в момент поиска; точность каталога — порядка километра, кроме малых населённых пунктов). Часовой пояс берётся как имя IANA и применяется с полной исторической базой tzdb. Для архивной точности вводите широту/долготу и часовой пояс вручную. Регрессионные кейсы разрешения мест (в т.ч. Тюмень и Кагул) зафиксированы в репозитории лаборатории.</p>
 <footer>
 <hr>
-<p class="small">SFERA Lab — research prototype, not a product · engine sfera-western-js 0.1.0-js.1
-(browser port of sfera-western 0.1.0) · no accounts, no tracking, no server ·
-<a href="about.html">methodology &amp; provenance</a> · <a href="privacy.html">privacy</a> ·
-<a href="lab-status.html">research status</a> · 18+ only</p>
+<p class="small">SFERA Lab — исследовательский прототип, не продукт · движок sfera-western-js 0.1.0-js.1 (браузерный порт sfera-western 0.1.0) · без аккаунтов, без слежки, без сервера расчёта · <a href="about.html">Методология</a> · <a href="privacy.html">Приватность</a> · <a href="lab-status.html">Статус исследований</a> · только 18+</p>
+<p class="small">Поиск мест: Open-Meteo Geocoding API / GeoNames (CC-BY 4.0) · Язык: RU · EN</p>
 </footer>
+<script src="js/astronomy.browser.min.js" integrity="sha384-LTVHvxfbG3XHla4Lu0C0s9U18B2sBOuzJIeOoVHm2t05SOOORvMbBMEVjXrGau9g" crossorigin="anonymous"></script>
+<script src="js/sfera_engine.js" integrity="sha384-KIATxuj5k4JMF1giAWqOHjr19UPkKPYPuQefKx5R+RgIFrTwOxZ0afq+CdrvsyRZ" crossorigin="anonymous"></script>
+<script src="js/telemetry_config.js" integrity="sha384-8AUZLrIeW+tw/q3HrUzURcpvlZ0y8GVWcr1Aydgn6uV/kzaFj8cknkIzP+9DHNjK" crossorigin="anonymous"></script>
+<script src="js/telemetry.js" integrity="sha384-qW6rULOwZb9Oovc/G5zGEr61e6KEIpqg/rwlzz7NIszXgZRzhgd/mNXXdwQpDaYe" crossorigin="anonymous"></script>
+<script src="js/places.js" integrity="sha384-3KgLRaPi6l9V/U+NkfMp/S4it8Ztc9Ofg+qC6jDUJ61itUsMcRC3i0x1OAZfkivr" crossorigin="anonymous"></script>
+<script src="js/app.js" integrity="sha384-+gE+hOZxHljnUIhVd5SWOU+XdwQvoz/fMElK0yXfqt0FO1I0JDgElgq1xdYeouZx" crossorigin="anonymous"></script>
 </body>
 </html>

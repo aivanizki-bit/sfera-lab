@@ -14,3 +14,22 @@ nav a{margin-right:1rem;font-size:.9rem}
 .err{border:1px solid #b00;background:#fff2f2;padding:.8rem;margin:1rem 0}
 footer{margin-top:2.5rem}
 @media (max-width:480px){body{margin:1rem auto}table{font-size:.85rem}}
+/* EXECUTION_004: place picker combobox, feedback instrument, a11y baseline */
+#city-list{list-style:none;margin:.2rem 0 0;padding:0;border:1px solid #999;
+max-height:280px;overflow:auto;background:#fff;z-index:5;position:relative}
+.city-opt{padding:.4rem .55rem;cursor:pointer;border-bottom:1px solid #eee}
+.city-opt:last-child{border-bottom:0}
+.city-opt[aria-selected="true"],.city-opt:hover{background:#eef3fa}
+.city-name{font-weight:bold}
+.city-sub{font-size:.78rem;color:#555}
+.city-empty{padding:.4rem .55rem;color:#555;font-style:italic}
+.feedback{border:1px solid #ccc;padding:.7rem .9rem;margin-top:1.4rem;background:#fafafa}
+.feedback legend{font-weight:bold;padding:0}
+.feedback .fb-opt{display:inline-block;margin-right:.9rem}
+.feedback label{margin-top:.5rem}
+input:focus-visible,select:focus-visible,textarea:focus-visible,button:focus-visible,
+[role="option"]:focus-visible,a:focus-visible{outline:2px solid #2c5a8f;outline-offset:1px}
+:focus{outline:2px solid #2c5a8f;outline-offset:1px}
+.city-status{font-size:.8rem;color:#555;min-height:1em}
+fieldset{margin:.6rem 0;padding:.3rem .6rem}
+@media (max-width:480px){#city-list{max-height:220px}}
